@@ -19,7 +19,10 @@ class CreateDemandLetterNameListsTable extends Migration
             $table->integer('name_list_id');
             $table->string('labour_card_no')->nullable();
             $table->string('issue_labour_date')->nullable();
-            
+            $table->string('identification_card')->nullable();
+            $table->string('issue_date_of_id_card')->nullable();
+            $table->double('salary')->default(0);
+            $table->integer('passport_status')->default(0);
             $table->timestamps();
         });
     }

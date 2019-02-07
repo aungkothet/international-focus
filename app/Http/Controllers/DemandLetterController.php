@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Company;
 use App\DemandLetter;
 use Illuminate\Http\Request;
 
@@ -12,9 +13,11 @@ class DemandLetterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request,$id)
     {
-        //
+        $demandLetters = Company::with('demandletter')->find($id);
+        // dd($demandLetters->toArray());
+        return view('demand_letters',['demandLetters' => $demandLetters]);
     }
 
     /**

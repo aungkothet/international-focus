@@ -12,5 +12,11 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $companies = \App\Company::all();
+    return view('welcome',['companies' => $companies]);
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/demand_letters/{id}','DemandLetterController@index');
