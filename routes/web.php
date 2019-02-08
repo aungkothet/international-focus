@@ -20,3 +20,4 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/demand_letters/{id}','DemandLetterController@index');
+Route::get('/demandletter/{companyID}/create','DemandLetterController@create');

@@ -17,7 +17,7 @@ class DemandLetterController extends Controller
     {
         $demandLetters = Company::with('demandletter')->find($id);
         // dd($demandLetters->toArray());
-        return view('demand_letters',['demandLetters' => $demandLetters]);
+        return view('demandletter.index',['demandLetters' => $demandLetters]);
     }
 
     /**
@@ -25,7 +25,7 @@ class DemandLetterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request,$companyID)
     {
         //
     }
