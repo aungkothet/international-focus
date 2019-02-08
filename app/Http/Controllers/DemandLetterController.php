@@ -27,7 +27,8 @@ class DemandLetterController extends Controller
      */
     public function create(Request $request,$companyID)
     {
-        //
+        
+        return view('demandletter.create',['companyID' => $companyID]);
     }
 
     /**
@@ -38,7 +39,16 @@ class DemandLetterController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request->all());
+        DemandLetter::create([
+            'company_id' => $request->companyID,
+            'date' => $request->demand_date,
+            'demand_no' => $request->demand_no,
+            'male_count' => $request->male_count,
+            'female_count' => $request->female_count,
+            'total' => ($request->male_count + $request->female_count)
+        ]);
+        return redirect('demand_letters/'.$request->companyID)->with("status",'Saved Success!');
     }
 
     /**
@@ -60,7 +70,7 @@ class DemandLetterController extends Controller
      */
     public function edit(DemandLetter $demandLetter)
     {
-        //
+        return view('demandletter.edit',['demandletter' => $demandLetter]);
     }
 
     /**
