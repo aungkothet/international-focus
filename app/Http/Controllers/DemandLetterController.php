@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Company;
 use App\DemandLetter;
+use App\DemandLetterNameList;
 use Illuminate\Http\Request;
 
 class DemandLetterController extends Controller
@@ -57,9 +58,11 @@ class DemandLetterController extends Controller
      * @param  \App\DemandLetter  $demandLetter
      * @return \Illuminate\Http\Response
      */
-    public function show(DemandLetter $demandLetter)
+    public function show($demandLetter)
     {
-        //
+        $demandLetters = DemandLetter::with('nameList')->find($demandLetter);
+        
+        return view('demandletter.detail',['demandLetters' => $demandLetters]);
     }
 
     /**
@@ -82,7 +85,16 @@ class DemandLetterController extends Controller
      */
     public function update(Request $request, DemandLetter $demandLetter)
     {
-        //
+        $demandLetter->update([
+            'company_id' => $request->companyID,
+            'date' => $request->demand_date,
+            'demand_no' => $request->demand_no,
+            'male_count' => $request->male_count,
+            'female_count' => $request->female_count,
+            'total' => ($request->male_count + $request->female_count)
+        ]);
+        return redirect('demand_letters/'.$request->companyID)->with("status",'Update Success!');
+
     }
 
     /**
@@ -94,5 +106,15 @@ class DemandLetterController extends Controller
     public function destroy(DemandLetter $demandLetter)
     {
         //
+    }
+
+    public function addComment(Request $request,DemandLetter $demandLetter)
+    {
+        $this->validate($request,[
+            'comment' => 'required',
+            'files' => 'required'
+        ]);
+       //need to do upload multiple files
+
     }
 }

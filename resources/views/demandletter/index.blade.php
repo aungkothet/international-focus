@@ -39,7 +39,7 @@
                             <tr>
                                 <td>{{ $key+1 }}</td>
                                 <td>{{ date('d-M-Y', strtotime($demandletter->date)) }}</td>
-                                <td>{{ $demandletter->demand_no }}</td>
+                                <td><a href="{{ url('demand_letter/detail/'.$demandletter->id) }}"> {{ $demandletter->demand_no }} </a></td>
                                 <td>{{ $demandletter->male_count }}</td>
                                 <td>{{ $demandletter->female_count }}</td>
                                 <td>{{ $demandletter->total }}</td>
@@ -61,6 +61,5 @@
         $(document).ready(function() {
             $('#demandLetterTable').DataTable();
         } );
-    </script>
-    
+    </script>       
 @endsection

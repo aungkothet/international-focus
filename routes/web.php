@@ -23,3 +23,8 @@ Route::get('/demand_letters/{id}','DemandLetterController@index');
 Route::get('/demand_letter/create/{companyID}','DemandLetterController@create');
 Route::post('/demand_letter/store', 'DemandLetterController@store');
 Route::get('/demand_letter/edit/{demandLetter}', 'DemandLetterController@edit');
+Route::post('/demand_letter/update/{demandLetter}', 'DemandLetterController@update');
+Route::post('/demand_letter/comment/{demandLetter}', 'DemandLetterController@addComment');
+Route::get('/demand_letter/detail/{demandLetter}', 'DemandLetterController@show');
+Route::get('/worker/create/{demandLetterID}', 'NameListController@create');
+Route::post('worker/store', 'NameListController@store');

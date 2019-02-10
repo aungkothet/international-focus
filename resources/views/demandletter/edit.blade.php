@@ -13,7 +13,7 @@
                     Demand Letter Edit Form
                 </div>
                 <div class="card-body">
-                    <form action="{{ url('demand_letter/edit/'.$demandletter->id) }}" method="POST">
+                    <form action="{{ url('demand_letter/update/'.$demandletter->id) }}" method="POST">
                         @csrf
                         <input type="hidden" name="companyID" value="{{ $demandletter->company_id }}">
                         <div class="form-group">

@@ -17,4 +17,9 @@ class DemandLetter extends Model
     {
         return $this->belongsTo('App\Company');
     }
+
+    public function nameList()
+    {
+        return $this->belongsToMany('App\NameList', 'demand_letter_name_lists', 'demand_letter_id','name_list_id');
+    }
 }

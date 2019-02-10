@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\DemandLetterNameList;
 use App\NameList;
+use App\Rules\OlderThan;
 use Illuminate\Http\Request;
+use Storage;
 
 class NameListController extends Controller
 {
@@ -22,9 +25,9 @@ class NameListController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($demandLetterID)
     {
-        //
+        return view('worker.create',['demandLetterID' => $demandLetterID]);
     }
 
     /**
@@ -34,8 +37,32 @@ class NameListController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
+    { 
+        $this->validate($request,[
+            'name' => 'required',
+            'fatherName' => 'required',
+            'gender' => 'required',
+            'nrc' => 'required',
+            'dob' => ['required', new OlderThan(18)],
+            'address' => 'required',
+            'photo' => 'required'
+        ]);
+
+        $nameList = NameList::create([
+            'name_mm' => $request->name ,
+            'father_name_mm' => $request->fatherName,
+            'gender_mm' => $request->gender,
+            'nrc_mm' => $request->nrc,
+            'dob_mm' => $request->dob,
+            'address_mm' => $request->address,
+            'photo' => $request->file('photo')->store('public/workerPhoto'),
+        ]);      
+        
+        DemandLetterNameList::create([
+            'demand_letter_id' => $request->demandLetterID ,
+            'name_list_id' => $nameList->id
+        ]);
+        return redirect('demand_letter/detail/'.$request->demandLetterID);
     }
 
     /**
