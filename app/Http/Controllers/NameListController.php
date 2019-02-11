@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DemandLetter;
 use App\DemandLetterNameList;
 use App\NameList;
 use App\Rules\OlderThan;
@@ -108,5 +109,33 @@ class NameListController extends Controller
     public function destroy(NameList $nameList)
     {
         //
+    }
+
+    public function createPassport(DemandLetter $demandLetterID)
+    {
+        $demandLetters = DemandLetter::with('nameList')->find($demandLetterID)->first()->toArray();
+        $collection = collect($demandLetters['name_list']);
+        $filterResult = $collection->filter(function ($value,$key)
+        {
+            return empty($value['passport_no']);
+        });
+        return view('worker.passport_create',['workerList' => $filterResult->all(), 'demandLetterID' => $demandLetters['id']]);
+        
+    }
+
+    public function updatePassport(Request $request)
+    {
+        $nameList = NameList::find($request->nameListID);
+        $nameList->update([
+            'name_eng' => $request->name ,
+            'father_name_eng' => $request->fatherName,
+            'gender_eng' => $request->gender,
+            'nrc_eng' => $request->nrc,
+            'dob_eng' => $nameList->dob_mm,
+            'address_eng' => $request->address,
+            'passport_no' => $request->passport_no,
+            'issue_date_of_passport' => $request->passport_issue_date,
+        ]);
+        return redirect()->back();
     }
 }

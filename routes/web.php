@@ -25,7 +25,14 @@ Route::post('/demand_letter/store', 'DemandLetterController@store');
 Route::get('/demand_letter/edit/{demandLetter}', 'DemandLetterController@edit');
 Route::post('/demand_letter/update/{demandLetter}', 'DemandLetterController@update');
 Route::post('/demand_letter/comment/{demandLetter}', 'DemandLetterController@addComment');
+Route::post('/demand_letter/passport/comment/{demandLetter}', 'DemandLetterController@addPassportComment');
+
+
 Route::get('/demand_letter/detail/{demandLetter}', 'DemandLetterController@show');
+Route::get('/demand_letter/detail2/{demandLetter}', 'DemandLetterController@showPassportList');
 Route::get('/worker/create/{demandLetterID}', 'NameListController@create');
+Route::get('/worker/passport/create/{demandLetterID}', 'NameListController@createPassport');
 Route::post('/worker/store', 'NameListController@store');
+Route::post('/worker/passport/update', 'NameListController@updatePassport');
+
 Route::post('/demand_letter/lock/{demandLetter}','DemandLetterController@lock');

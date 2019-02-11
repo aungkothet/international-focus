@@ -15,13 +15,13 @@
         @endif
         <div class="row">
             <div class="col-md-4">
-                <a href="{{ url('worker/create/'.$demandLetters->id) }}" class="btn btn-primary m-1">Add New Worker</a>
+                <a href="{{ url('worker/passport/create/'.$demandLetters['id']) }}" class="btn btn-primary m-1">Add New Worker</a>
             </div>
             <div class="col-md-4">
-                <h1> Name List </h1>
+                <h5> Name List2 - Passport </h5>
             </div>
             <div class="col-md-4 ">
-                <a href="{{ url('demand_letters/'.$demandLetters->company_id) }}" class="btn btn-danger m-1 float-right">Back To Demand Letter List</a>
+                <a href="{{ url('demand_letter/detail/'.$demandLetters['id']) }}" class="btn btn-danger m-1 float-right">Back To Name List</a>
             </div>
         </div>
         <div class="row">
@@ -39,17 +39,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @php $demandLetters = $demandLetters->toArray(); @endphp
                         @foreach ($demandLetters['name_list'] as $key => $name_list)
                             <tr>
                                 <td>{{ $key+1 }}</td>
                                 <td>
                                     <img src="{{ Storage::url(str_replace('public','',$name_list['photo'])) }}" class="rounded" width="50px" height="50px" >
                                 </td>
-                                <td>{{ $name_list['name_mm'] }}</td>
-                                <td>{{ $name_list['nrc_mm'] }}</td>
-                                <td>{{ $name_list['gender_mm'] }}</td>
-                                <td>{{ $name_list['address_mm'] }}</td>
+                                <td>{{ $name_list['name_eng'] }}</td>
+                                <td>{{ $name_list['nrc_eng'] }}</td>
+                                <td>{{ $name_list['gender_eng'] }}</td>
+                                <td>{{ $name_list['address_eng'] }}</td>
                                 <td>
                                     <a href="{{ url('worker/edit/'.$name_list['id']) }}" class="btn btn-info">Edit</a>
                                 </td>
@@ -63,10 +62,10 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                       Add Comment for this Demand Letter
+                        Add Comment for this Demand Letter
                     </div>
                     <div class="card-body">
-                        <form action="{{ url('demand_letter/comment/'.$demandLetters['id']) }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ url('demand_letter/passport/comment/'.$demandLetters['id']) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">
                                 <label for="comment">Comment<span class="text-danger">*</span></label>
@@ -94,7 +93,7 @@
         </div>
         <div class="row mt-3">
             <div class="col-md-4 ml-auto">               
-            <a href="{{ url('demand_letter/detail2/'.$demandLetters['id']) }}" class="btn btn-primary m-1 float-right {{ ($demandLetters['comments'])? :'disabled'}}">Next</a>
+            <a href="{{ url('demand_letter/detail3/'.$demandLetters['id']) }}" class="btn btn-primary m-1 float-right {{ ($demandLetters['passport_comments'])? :'disabled'}}">Next</a>
             <button class="btn btn-primary m-1 float-right" id="btnNote">Note</a>
             </div>
         </div>

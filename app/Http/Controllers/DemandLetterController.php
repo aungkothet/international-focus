@@ -131,4 +131,35 @@ class DemandLetterController extends Controller
        //need to do upload multiple files
 
     }
+
+    public function addPassportComment(Request $request,DemandLetter $demandLetter)
+    {
+        $this->validate($request,[
+            'comment' => 'required',
+            'files' => 'required'
+        ]);
+        foreach($request->file('files') as $file)
+        {          
+            $data[]  =  $file->store('public/Attachment/DemandLetter/'.$demandLetter->id);
+        }
+        $demandLetter->update([
+            'passport_comments' => $request->comment,
+            'passport_attached_files' => $data
+        ]);
+        return \redirect()->back();
+       //need to do upload multiple files
+
+    }
+    
+    public function showPassportList(DemandLetter $demandLetter)
+    {
+        $demandLetters = DemandLetter::with('nameList')->find($demandLetter)->first()->toArray();
+        $collection = collect($demandLetters['name_list']);
+        $filterResult = $collection->filter(function ($value,$key)
+        {
+            return !empty($value['passport_no']);
+        });
+        $demandLetters['name_list'] = $filterResult->all();
+        return view('demandletter.detail2',['demandLetters' => $demandLetters]);
+    }
 }
