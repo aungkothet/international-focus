@@ -10,7 +10,7 @@
         <div class="col-md-10 offset-md-1">
             <div class="card">
                 <div class="card-header">
-                    Worker Create Form
+                    Worker Create Form (ျမန္မာဘာသာျဖင့္ ျဖည့္ရန္)
                 </div>
                 <div class="card-body">
                     <form action="{{ url('worker/store') }}" method="POST" enctype="multipart/form-data">
@@ -80,6 +80,7 @@
                             @endif
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
+                        <a href="{{ url('demand_letter/detail/'.$demandLetterID) }}" class="btn btn-danger">Back To Detail</a>
                     </form>
                 </div>
             </div>

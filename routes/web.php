@@ -27,4 +27,5 @@ Route::post('/demand_letter/update/{demandLetter}', 'DemandLetterController@upda
 Route::post('/demand_letter/comment/{demandLetter}', 'DemandLetterController@addComment');
 Route::get('/demand_letter/detail/{demandLetter}', 'DemandLetterController@show');
 Route::get('/worker/create/{demandLetterID}', 'NameListController@create');
-Route::post('worker/store', 'NameListController@store');
+Route::post('/worker/store', 'NameListController@store');
+Route::post('/demand_letter/lock/{demandLetter}','DemandLetterController@lock');

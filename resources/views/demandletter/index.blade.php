@@ -45,6 +45,12 @@
                                 <td>{{ $demandletter->total }}</td>
                                 <td>
                                     <a href="{{ url('demand_letter/edit/'.$demandletter->id) }}" class="btn btn-info">Edit</a>
+                                    @auth
+                                    <form action="{{ url('demand_letter/lock/'.$demandletter->id)}}"  method="POST">
+                                        @csrf
+                                        <input type="submit" class="btn btn-primary" value="Lock"/>
+                                    </form>
+                                    @endauth
                                 </td>
                             </tr>
                         @endforeach

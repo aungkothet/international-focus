@@ -17,7 +17,10 @@
             <div class="col-md-4">
                 <a href="{{ url('worker/create/'.$demandLetters->id) }}" class="btn btn-primary m-1">Add New Worker</a>
             </div>
-            <div class="col-md-4 offset-md-4 ">
+            <div class="col-md-4">
+                <h1> Name List </h1>
+            </div>
+            <div class="col-md-4 ">
                 <a href="{{ url('demand_letters/'.$demandLetters->company_id) }}" class="btn btn-danger m-1 float-right">Back To Demand Letter List</a>
             </div>
         </div>
@@ -76,7 +79,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="photo">Attach File(s) Upload<span class="text-danger">*</span></label> 
-                                <input type="file"  name="files" required id="photo" placeholder="Upload photo.." multiple>
+                                <input type="file"  name="files[]" required id="photo" placeholder="Upload photo.." multiple>
                                 @if($errors->has('photo'))
                                     <span class="text-danger">
                                         <strong>{{ $errors->first('photo') }}</strong>

@@ -28,7 +28,6 @@ class DemandLetterController extends Controller
      */
     public function create(Request $request,$companyID)
     {
-        
         return view('demandletter.create',['companyID' => $companyID]);
     }
 
@@ -61,10 +60,16 @@ class DemandLetterController extends Controller
     public function show($demandLetter)
     {
         $demandLetters = DemandLetter::with('nameList')->find($demandLetter);
-        
         return view('demandletter.detail',['demandLetters' => $demandLetters]);
     }
 
+    public function lock(Request $request,DemandLetter $demandLetter)
+    {
+        $demandLetter->update([
+            'lock_status' => 1
+        ]);
+         return \redirect()->back();
+    }
     /**
      * Show the form for editing the specified resource.
      *
@@ -114,6 +119,15 @@ class DemandLetterController extends Controller
             'comment' => 'required',
             'files' => 'required'
         ]);
+        foreach($request->file('files') as $file)
+        {          
+            $data[]  =  $file->store('public/Attachment/DemandLetter/'.$demandLetter->id);
+        }
+        $demandLetter->update([
+            'comments' => $request->comment,
+            'demand_attached_files' => $data
+        ]);
+        return \redirect()->back();
        //need to do upload multiple files
 
     }
