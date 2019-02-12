@@ -28,6 +28,7 @@
                 <div class="card-body">
                     <form action="{{ url('worker/passport/update') }}" method="POST" id="updateForm">
                         @csrf
+                        <input type="hidden" name="demandLetterID" value="{{ $demandLetterID }}">
                         <input type="hidden" name="nameListID" value="" id="nameListID">
                         <div class="form-group">
                             <label for="name">Name<span class="text-danger">*</span></label>

@@ -29,7 +29,9 @@ Route::post('/demand_letter/passport/comment/{demandLetter}', 'DemandLetterContr
 
 
 Route::get('/demand_letter/detail/{demandLetter}', 'DemandLetterController@show');
-Route::get('/demand_letter/detail2/{demandLetter}', 'DemandLetterController@showPassportList');
+Route::get('/demand_letter/passport/{demandLetter}', 'DemandLetterController@showPassportList');
+Route::get('/demand_letter/contract/{demandLetter}', 'DemandLetterController@showContractList');
+
 Route::get('/worker/create/{demandLetterID}', 'NameListController@create');
 Route::get('/worker/passport/create/{demandLetterID}', 'NameListController@createPassport');
 Route::post('/worker/store', 'NameListController@store');

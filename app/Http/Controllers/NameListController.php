@@ -136,6 +136,9 @@ class NameListController extends Controller
             'passport_no' => $request->passport_no,
             'issue_date_of_passport' => $request->passport_issue_date,
         ]);
+        $demandLetterNameList = DemandLetterNameList::where('demand_letter_id',$request->demandLetterID)->where('name_list_id',$request->nameListID)->first();
+        $demandLetterNameList->update(['passport_status'=>1]);
+        
         return redirect()->back();
     }
 }

@@ -18,7 +18,7 @@
                 <a href="{{ url('worker/passport/create/'.$demandLetters['id']) }}" class="btn btn-primary m-1">Add New Worker</a>
             </div>
             <div class="col-md-4">
-                <h5> Name List2 - Passport </h5>
+                <h5> Passport Name List </h5>
             </div>
             <div class="col-md-4 ">
                 <a href="{{ url('demand_letter/detail/'.$demandLetters['id']) }}" class="btn btn-danger m-1 float-right">Back To Name List</a>
@@ -93,7 +93,7 @@
         </div>
         <div class="row mt-3">
             <div class="col-md-4 ml-auto">               
-            <a href="{{ url('demand_letter/detail3/'.$demandLetters['id']) }}" class="btn btn-primary m-1 float-right {{ ($demandLetters['passport_comments'])? :'disabled'}}">Next</a>
+            <a href="{{ url('demand_letter/contract/'.$demandLetters['id']) }}" class="btn btn-primary m-1 float-right {{ ($demandLetters['passport_comments'])? :'disabled'}}">Next</a>
             <button class="btn btn-primary m-1 float-right" id="btnNote">Note</a>
             </div>
         </div>

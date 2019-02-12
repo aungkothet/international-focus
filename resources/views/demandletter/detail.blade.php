@@ -94,7 +94,7 @@
         </div>
         <div class="row mt-3">
             <div class="col-md-4 ml-auto">               
-            <a href="{{ url('demand_letter/detail2/'.$demandLetters['id']) }}" class="btn btn-primary m-1 float-right {{ ($demandLetters['comments'])? :'disabled'}}">Next</a>
+            <a href="{{ url('demand_letter/passport/'.$demandLetters['id']) }}" class="btn btn-primary m-1 float-right {{ ($demandLetters['comments'])? :'disabled'}}">Next</a>
             <button class="btn btn-primary m-1 float-right" id="btnNote">Note</a>
             </div>
         </div>

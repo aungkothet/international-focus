@@ -15,7 +15,8 @@ class DemandLetter extends Model
 
     protected $casts = [
         'demand_attached_files' => 'array',
-        'summary_attached_files' => 'array'
+        'summary_attached_files' => 'array',
+        'passport_attached_files' => 'array'
     ];
 
     public function company()
