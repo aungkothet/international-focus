@@ -25,6 +25,8 @@ class CreateDemandLettersTable extends Migration
             $table->text('comments')->nullable();
             $table->json('passport_attached_files')->nullable();//for multi image location save
             $table->text('passport_comments')->nullable();
+            $table->json('contract_attached_files')->nullable();//for multi image location save
+            $table->text('contract_comments')->nullable();
             $table->integer('lock_status')->default(0);//0 unlock, 1 lock
             $table->json('summary_attached_files')->nullable();
             $table->text('summary_comments')->nullable();

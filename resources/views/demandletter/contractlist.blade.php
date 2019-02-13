@@ -15,13 +15,13 @@
         @endif
         <div class="row">
             <div class="col-md-4">
-                <a href="{{ url('worker/passport/create/'.$demandLetters['id']) }}" class="btn btn-primary m-1">Add New Worker</a>
+                <a href="{{ url('worker/contract/create/'.$demandLetters['id']) }}" class="btn btn-primary m-1">Add New Worker</a>
             </div>
             <div class="col-md-4">
-                <h5> Passport Name List </h5>
+                <h5> Contract List </h5>
             </div>
             <div class="col-md-4 ">
-                <a href="{{ url('demand_letter/detail/'.$demandLetters['id']) }}" class="btn btn-danger m-1 float-right">Back To Name List</a>
+                <a href="{{ url('demand_letter/passport/'.$demandLetters['id']) }}" class="btn btn-danger m-1 float-right">Back To Passport Name List</a>
             </div>
         </div>
         <div class="row">
@@ -65,7 +65,7 @@
                         Add Comment for this Demand Letter
                     </div>
                     <div class="card-body">
-                        <form action="{{ url('demand_letter/passport/comment/'.$demandLetters['id']) }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ url('demand_letter/contract/comment/'.$demandLetters['id']) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">
                                 <label for="comment">Comment<span class="text-danger">*</span></label>
@@ -94,7 +94,7 @@
         </div>
         <div class="row mt-3">
             <div class="col-md-4 ml-auto">               
-            <a href="{{ url('demand_letter/contract/'.$demandLetters['id']) }}" class="btn btn-primary m-1 float-right {{ ($demandLetters['passport_comments'])? :'disabled'}}">Next</a>
+            <a href="{{ url('demand_letter/contract/'.$demandLetters['id']) }}" class="btn btn-primary m-1 float-right {{ ($demandLetters['contract_comments'])? :'disabled'}}">Next</a>
             <button class="btn btn-primary m-1 float-right" id="btnNote">Note</a>
             </div>
         </div>
@@ -111,6 +111,7 @@
             $('#cancelBTN').click(function(){
                 $('#commentForm').addClass('d-none');
             });
+
         } );
     </script>
 @endsection

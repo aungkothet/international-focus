@@ -35,7 +35,9 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @php $i=1; @endphp
                         @foreach ($demandLetters->demandletter as $key => $demandletter)
+                            @auth
                             <tr>
                                 <td>{{ $key+1 }}</td>
                                 <td>{{ date('d-M-Y', strtotime($demandletter->date)) }}</td>
@@ -48,11 +50,33 @@
                                     @auth
                                     <form action="{{ url('demand_letter/lock/'.$demandletter->id)}}"  method="POST">
                                         @csrf
-                                        <input type="submit" class="btn btn-primary" value="Lock"/>
+                                        <input type="submit" class="btn btn-primary {{ ($demandletter->lock_status)? 'disabled' :'' }}" value="{{ ($demandletter->lock_status)? 'Locked':'Lock' }}"/>
                                     </form>
                                     @endauth
                                 </td>
                             </tr>
+                            @else
+                                @if (!$demandletter->lock_status)
+                                <tr>
+                                    <td>{{ $i++ }}</td>
+                                    <td>{{ date('d-M-Y', strtotime($demandletter->date)) }}</td>
+                                    <td><a href="{{ url('demand_letter/detail/'.$demandletter->id) }}"> {{ $demandletter->demand_no }} </a></td>
+                                    <td>{{ $demandletter->male_count }}</td>
+                                    <td>{{ $demandletter->female_count }}</td>
+                                    <td>{{ $demandletter->total }}</td>
+                                    <td>
+                                        <a href="{{ url('demand_letter/edit/'.$demandletter->id) }}" class="btn btn-info">Edit</a>
+                                        @auth
+                                        <form action="{{ url('demand_letter/lock/'.$demandletter->id)}}"  method="POST">
+                                            @csrf
+                                            <input type="submit" class="btn btn-primary" value="Lock"/>
+                                        </form>
+                                        @endauth
+                                    </td>
+                                </tr>
+                                @endif
+                            @endauth
+                            
                         @endforeach
                     </tbody>
                 </table>

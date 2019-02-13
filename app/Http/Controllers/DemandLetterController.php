@@ -162,4 +162,16 @@ class DemandLetterController extends Controller
         $demandLetters['name_list'] = $filterResult->all();
         return view('demandletter.detail2',['demandLetters' => $demandLetters]);
     }
+
+    public function showContractList(DemandLetter $demandLetter)
+    {
+        $demandLetters = DemandLetter::with('nameList')->find($demandLetter)->first()->toArray();
+        $collection = collect($demandLetters['name_list']);
+        $filterResult = $collection->filter(function ($value,$key)
+        {
+            return ($value['pivot']['passport_status']) && ($value['pivot']['contract_status']);
+        });
+        $demandLetters['name_list'] = $filterResult->all();
+        return view('demandletter.contractlist',['demandLetters' => $demandLetters]);
+    }
 }

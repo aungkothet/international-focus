@@ -87,6 +87,7 @@
                                 @endif
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="button" class="btn btn-secondary" id="cancelBTN">Cancel</button>
                         </form>
                     </div>
                 </div>
@@ -107,7 +108,10 @@
             $('#nameListTable').DataTable();
             $('#btnNote').click(function(){
                 $('#commentForm').removeClass('d-none');
-            })
+            });
+            $('#cancelBTN').click(function(){
+                $('#commentForm').addClass('d-none');
+            });
         } );
     </script>
 @endsection

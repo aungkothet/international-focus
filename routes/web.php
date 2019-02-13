@@ -34,6 +34,7 @@ Route::get('/demand_letter/contract/{demandLetter}', 'DemandLetterController@sho
 
 Route::get('/worker/create/{demandLetterID}', 'NameListController@create');
 Route::get('/worker/passport/create/{demandLetterID}', 'NameListController@createPassport');
+Route::get('/worker/contract/create/{demandLetterID}', 'NameListController@createContract');
 Route::post('/worker/store', 'NameListController@store');
 Route::post('/worker/passport/update', 'NameListController@updatePassport');
 

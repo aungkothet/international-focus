@@ -141,4 +141,16 @@ class NameListController extends Controller
         
         return redirect()->back();
     }
+
+    public function createContract(DemandLetter $demandLetterID)
+    {
+        $demandLetters = DemandLetter::with('nameList')->find($demandLetter)->first()->toArray();
+        $collection = collect($demandLetters['name_list']);
+        $filterResult = $collection->filter(function ($value,$key)
+        {
+            return ($value['pivot']['passport_status']) && ($value['pivot']['contract_status']);
+        });
+        return view('worker.passport_create',['workerList' => $filterResult->all(), 'demandLetterID' => $demandLetters['id']]);
+        
+    }
 }
