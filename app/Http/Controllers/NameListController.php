@@ -57,6 +57,7 @@ class NameListController extends Controller
             'dob_mm' => $request->dob,
             'address_mm' => $request->address,
             'photo' => $request->file('photo')->store('public/workerPhoto'),
+            'unique_id' => strtoupper(bin2hex(openssl_random_pseudo_bytes(4))),
         ]);      
         
         DemandLetterNameList::create([
@@ -144,13 +145,25 @@ class NameListController extends Controller
 
     public function createContract(DemandLetter $demandLetterID)
     {
-        $demandLetters = DemandLetter::with('nameList')->find($demandLetter)->first()->toArray();
+        $demandLetters = DemandLetter::with('nameList')->find($demandLetterID)->first()->toArray();
         $collection = collect($demandLetters['name_list']);
         $filterResult = $collection->filter(function ($value,$key)
         {
-            return ($value['pivot']['passport_status']) && ($value['pivot']['contract_status']);
+            return ($value['pivot']['passport_status']) && (!$value['pivot']['contract_status']);
         });
-        return view('worker.passport_create',['workerList' => $filterResult->all(), 'demandLetterID' => $demandLetters['id']]);
+        return view('worker.contract_create',['workerList' => $filterResult->all(), 'demandLetterID' => $demandLetters['id']]);
+    }
+
+    public function updateContract(Request $request)
+    {
+        $demandLetterNameList = DemandLetterNameList::where('demand_letter_id',$request->demandLetterID)->where('name_list_id',$request->nameListID)->first();
+        $demandLetterNameList->update([
+            'contract_status'=>1,
+            'labour_card_no' => $request->labourcard_no,
+            'issue_labour_date' => $request->issue_labour_date,
+            'salary' => $request->salary
+            ]);
         
+        return redirect()->back();
     }
 }

@@ -151,6 +151,24 @@ class DemandLetterController extends Controller
 
     }
     
+    public function addContractComment(Request $request,DemandLetter $demandLetter)
+    {
+        $this->validate($request,[
+            'comment' => 'required',
+            'files' => 'required'
+        ]);
+        foreach($request->file('files') as $file)
+        {          
+            $data[]  =  $file->store('public/Attachment/DemandLetter/'.$demandLetter->id);
+        }
+        $demandLetter->update([
+            'contract_comments' => $request->comment,
+            'contract_attached_files' => $data
+        ]);
+        return redirect()->back();
+       //need to do upload multiple files
+
+    }
     public function showPassportList(DemandLetter $demandLetter)
     {
         $demandLetters = DemandLetter::with('nameList')->find($demandLetter)->first()->toArray();
@@ -173,5 +191,10 @@ class DemandLetterController extends Controller
         });
         $demandLetters['name_list'] = $filterResult->all();
         return view('demandletter.contractlist',['demandLetters' => $demandLetters]);
+    }
+
+    public function showSendingList(Type $var = null)
+    {
+        # code...
     }
 }

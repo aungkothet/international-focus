@@ -39,9 +39,10 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @php $i=1; @endphp
                         @foreach ($demandLetters['name_list'] as $key => $name_list)
                             <tr>
-                                <td>{{ $key+1 }}</td>
+                                <td>{{ $i++ }}</td>
                                 <td>
                                     <img src="{{ Storage::url(str_replace('public','',$name_list['photo'])) }}" class="rounded" width="50px" height="50px" >
                                 </td>

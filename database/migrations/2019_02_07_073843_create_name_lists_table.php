@@ -31,6 +31,8 @@ class CreateNameListsTable extends Migration
             $table->string('passport_no')->nullable();
             $table->string('issue_date_of_passport')->nullable();
             $table->string('photo')->nullable();
+            $table->string('unique_id')->nullable();
+            $table->string('qrcode')->nullable();
             $table->timestamps();
         });
     }

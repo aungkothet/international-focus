@@ -10,6 +10,14 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('qr-code', function () {
+    $pngImage = QrCode::format('png')
+    ->size(500)->errorCorrection('H')
+    ->generate('LOVE ME LIKE YOU DO!');
+    
+    file_put_contents('storage/img.png',$pngImage);
+return response($pngImage)->header('Content-type','image/png');
+});
 
 Route::get('/', function () {
     $companies = \App\Company::all();
@@ -26,16 +34,18 @@ Route::get('/demand_letter/edit/{demandLetter}', 'DemandLetterController@edit');
 Route::post('/demand_letter/update/{demandLetter}', 'DemandLetterController@update');
 Route::post('/demand_letter/comment/{demandLetter}', 'DemandLetterController@addComment');
 Route::post('/demand_letter/passport/comment/{demandLetter}', 'DemandLetterController@addPassportComment');
-
+Route::post('/demand_letter/contract/comment/{demandLetter}', 'DemandLetterController@addContractComment');
 
 Route::get('/demand_letter/detail/{demandLetter}', 'DemandLetterController@show');
 Route::get('/demand_letter/passport/{demandLetter}', 'DemandLetterController@showPassportList');
 Route::get('/demand_letter/contract/{demandLetter}', 'DemandLetterController@showContractList');
+Route::get('/demand_letter/sending/{demandLetter}', 'DemandLetterController@showSendingList');
 
 Route::get('/worker/create/{demandLetterID}', 'NameListController@create');
 Route::get('/worker/passport/create/{demandLetterID}', 'NameListController@createPassport');
 Route::get('/worker/contract/create/{demandLetterID}', 'NameListController@createContract');
 Route::post('/worker/store', 'NameListController@store');
 Route::post('/worker/passport/update', 'NameListController@updatePassport');
+Route::post('/worker/contract/update', 'NameListController@updateContract');
 
 Route::post('/demand_letter/lock/{demandLetter}','DemandLetterController@lock');
