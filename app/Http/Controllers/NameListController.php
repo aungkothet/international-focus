@@ -7,6 +7,7 @@ use App\DemandLetterNameList;
 use App\NameList;
 use App\Rules\OlderThan;
 use Illuminate\Http\Request;
+use QrCode;
 use Storage;
 
 class NameListController extends Controller
@@ -48,7 +49,14 @@ class NameListController extends Controller
             'address' => 'required',
             'photo' => 'required'
         ]);
-
+        $unique_id = strtoupper(bin2hex(openssl_random_pseudo_bytes(4)));
+        $pngImage = QrCode::format('png')
+        ->size(500)->errorCorrection('H')
+        ->generate($unique_id);
+        $qr_name = 'storage/workerPhoto/'. $unique_id .'.png';
+        file_put_contents($qr_name ,$pngImage);
+        
+        $qr_name = \str_replace('storage/','public/',$qr_name);
         $nameList = NameList::create([
             'name_mm' => $request->name ,
             'father_name_mm' => $request->fatherName,
@@ -57,7 +65,8 @@ class NameListController extends Controller
             'dob_mm' => $request->dob,
             'address_mm' => $request->address,
             'photo' => $request->file('photo')->store('public/workerPhoto'),
-            'unique_id' => strtoupper(bin2hex(openssl_random_pseudo_bytes(4))),
+            'unique_id' => $unique_id ,
+            'qrcode' => $qr_name
         ]);      
         
         DemandLetterNameList::create([

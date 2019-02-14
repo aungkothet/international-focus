@@ -10,15 +10,6 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('qr-code', function () {
-    $pngImage = QrCode::format('png')
-    ->size(500)->errorCorrection('H')
-    ->generate('LOVE ME LIKE YOU DO!');
-    
-    file_put_contents('storage/img.png',$pngImage);
-return response($pngImage)->header('Content-type','image/png');
-});
-
 Route::get('/', function () {
     $companies = \App\Company::all();
     return view('welcome',['companies' => $companies]);
