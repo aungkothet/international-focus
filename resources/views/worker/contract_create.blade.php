@@ -18,7 +18,7 @@
                 </select>
             </div>
         </div>
-        <div class="col-md-">
+        <div class="col-md-5">
             <a href="{{ url('demand_letter/contract/'.$demandLetterID) }}" class="btn btn-danger">Back To Contract List</a>
         </div>
     </div>

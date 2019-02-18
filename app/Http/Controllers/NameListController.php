@@ -197,5 +197,10 @@ class NameListController extends Controller
         }
         return redirect('demand_letter/sending/'.$request->demandLetterID);
     }
+
+    public function downloadQR(NameList $nameList)
+    {
+        return Storage::download($nameList->qrcode,$nameList->unique_id.'.png');
+    }
     
 }

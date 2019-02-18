@@ -32,6 +32,7 @@
                         <th>No</th>
                         <th>Photo</th>
                         <th>Name</th>
+                        <th>UniqueID</th>
                         <th>NRC</th>
                         <th>Gender</th>
                         <th>Address</th>
@@ -46,6 +47,7 @@
                                 <img src="{{ Storage::url(str_replace('public','',$name_list['photo'])) }}" class="rounded" width="50px" height="50px" >
                             </td>
                             <td>{{ $name_list['name_eng'] }}</td>
+                            <td>{{ $name_list['unique_id']}}</td>
                             <td>{{ $name_list['nrc_eng'] }}</td>
                             <td>{{ $name_list['gender_eng'] }}</td>
                             <td>{{ $name_list['address_eng'] }}</td>

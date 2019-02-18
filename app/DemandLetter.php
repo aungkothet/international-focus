@@ -11,13 +11,14 @@ class DemandLetter extends Model
 
     protected $dates = ['deleted_at'];
     
-    protected $fillable = ['contract_attached_files','contract_comments','company_id','date','demand_no','male_count','female_count','total','demand_attached_files','comments','lock_status','passport_attached_files','passport_comments','summary_attached_files','summary_comments'];
+    protected $fillable = ['contract_attached_files','contract_comments','company_id','date','demand_no','male_count','female_count','total','demand_attached_files','comments','lock_status','passport_attached_files','passport_comments','sending_attached_files','sending_comments','summary_attached_files','summary_comments'];
 
     protected $casts = [
         'demand_attached_files' => 'array',
         'summary_attached_files' => 'array',
         'passport_attached_files' => 'array',
-        'contract_attached_files' => 'array'
+        'contract_attached_files' => 'array',
+        'sending_attached_files' => 'array'
     ];
 
     public function company()

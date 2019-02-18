@@ -189,6 +189,24 @@ class DemandLetterController extends Controller
 
     }
 
+    public function addSummaryComment(Request $request,DemandLetter $demandLetter)
+    {
+        $this->validate($request,[
+            'comment' => 'required',
+            'files' => 'required'
+        ]);
+        foreach($request->file('files') as $file)
+        {          
+            $data[]  =  $file->store('public/Attachment/DemandLetter/'.$demandLetter->id);
+        }
+        $demandLetter->update([
+            'summary_comments' => $request->comment,
+            'summary_attached_files' => $data
+        ]);
+        return redirect()->back();
+    }
+
+
     public function showPassportList(DemandLetter $demandLetter)
     {
         $demandLetters = DemandLetter::with('nameList')->find($demandLetter)->first()->toArray();

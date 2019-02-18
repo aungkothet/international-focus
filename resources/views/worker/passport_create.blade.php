@@ -7,7 +7,7 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-10 offset-md-1">
+        <div class="col-md-6 offset-md-1">
             <div class="form-group">
                 <label for="name">Select Worker To Fill <span class="text-danger">*</span></label>
                 <select id="workerID">
@@ -17,6 +17,9 @@
                     @endforeach
                 </select>
             </div>
+        </div>
+        <div class="col-md-5">
+            <a href="{{ url('demand_letter/passport/'.$demandLetterID) }}" class="btn btn-danger">Back To Passport Name List</a>
         </div>
     </div>
     <div class="row d-none" id="form">

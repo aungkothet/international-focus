@@ -32,6 +32,7 @@
                             <th>No</th>
                             <th>Photo</th>
                             <th>Name</th>
+                            <th>UniqueID</th>
                             <th>NRC</th>
                             <th>Gender</th>
                             <th>Address</th>
@@ -45,13 +46,16 @@
                                 <td>{{ $key+1 }}</td>
                                 <td>
                                     <img src="{{ Storage::url(str_replace('public','',$name_list['photo'])) }}" class="rounded" width="50px" height="50px" >
+                                    <img src="{{ Storage::url(str_replace('public','',$name_list['qrcode'])) }}" class="rounded" width="50px" height="50px" >
                                 </td>
                                 <td>{{ $name_list['name_mm'] }}</td>
+                                <td>{{ $name_list['unique_id']}}</td>
                                 <td>{{ $name_list['nrc_mm'] }}</td>
                                 <td>{{ $name_list['gender_mm'] }}</td>
                                 <td>{{ $name_list['address_mm'] }}</td>
                                 <td>
                                     <a href="{{ url('worker/edit/'.$name_list['id']) }}" class="btn btn-info">Edit</a>
+                                    <a href="{{ url('qrcode/download/'.$name_list['id']) }}" class="btn btn-info">Download Qr</a>
                                 </td>
                             </tr>
                         @endforeach

@@ -27,6 +27,7 @@ Route::post('/demand_letter/comment/{demandLetter}', 'DemandLetterController@add
 Route::post('/demand_letter/passport/comment/{demandLetter}', 'DemandLetterController@addPassportComment');
 Route::post('/demand_letter/contract/comment/{demandLetter}', 'DemandLetterController@addContractComment');
 Route::post('/demand_letter/sending/comment/{demandLetter}', 'DemandLetterController@addSendingComment');
+Route::post('/demand_letter/summary/comment/{demandLetter}', 'DemandLetterController@addSummaryComment');
 
 Route::get('/demand_letter/detail/{demandLetter}', 'DemandLetterController@show');
 Route::get('/demand_letter/passport/{demandLetter}', 'DemandLetterController@showPassportList');
@@ -43,3 +44,5 @@ Route::post('/worker/contract/update', 'NameListController@updateContract');
 Route::post('/worker/sending/update', 'NameListController@updateSending');
 
 Route::get('/demand_letter/lock/{demandLetter}','DemandLetterController@lock')->middleware('auth');
+
+Route::get('/qrcode/download/{nameList}','NameListController@downloadQR');
