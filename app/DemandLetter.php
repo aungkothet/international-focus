@@ -27,6 +27,6 @@ class DemandLetter extends Model
 
     public function nameList()
     {
-        return $this->belongsToMany('App\NameList', 'demand_letter_name_lists', 'demand_letter_id','name_list_id')->withPivot('labour_card_no','issue_labour_date','identification_card','issue_date_of_id_card','salary','passport_status','contract_status');
+        return $this->belongsToMany('App\NameList', 'demand_letter_name_lists', 'demand_letter_id','name_list_id')->withPivot('labour_card_no','issue_labour_date','identification_card','issue_date_of_id_card','salary','passport_status','contract_status','sending_status');
     }
 }

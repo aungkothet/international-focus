@@ -175,4 +175,27 @@ class NameListController extends Controller
         
         return redirect()->back();
     }
+
+    public function createSending(DemandLetter $demandLetterID)
+    {
+        $demandLetters = DemandLetter::with('nameList')->find($demandLetterID)->first()->toArray();
+        $collection = collect($demandLetters['name_list']);
+        $filterResult = $collection->filter(function ($value,$key)
+        {
+            return ($value['pivot']['passport_status'])  && ($value['pivot']['contract_status']) && (!$value['pivot']['sending_status']);
+        });
+        return view('worker.sending_create',['workerList' => $filterResult->all(), 'demandLetterID' => $demandLetters['id']]);
+    }
+
+    public function updateSending(Request $request)
+    {
+        $demandLetterNameList = DemandLetterNameList::where('demand_letter_id',$request->demandLetterID)->whereIn('name_list_id',$request->nameList)->get();
+        foreach ($demandLetterNameList as $key => $value) {
+            $value->update([
+                'sending_status' => 1
+            ]);
+        }
+        return redirect('demand_letter/sending/'.$request->demandLetterID);
+    }
+    
 }

@@ -24,6 +24,7 @@ class CreateDemandLetterNameListsTable extends Migration
             $table->double('salary')->default(0);
             $table->integer('passport_status')->default(0);
             $table->integer('contract_status')->default(0);
+            $table->integer('sending_status')->default(0);
             $table->timestamps();
         });
     }

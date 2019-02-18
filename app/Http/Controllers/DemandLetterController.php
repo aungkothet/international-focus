@@ -68,7 +68,7 @@ class DemandLetterController extends Controller
         $demandLetter->update([
             'lock_status' => 1
         ]);
-         return \redirect()->back();
+         return redirect('/');
     }
     /**
      * Show the form for editing the specified resource.
@@ -169,6 +169,26 @@ class DemandLetterController extends Controller
        //need to do upload multiple files
 
     }
+
+    public function addSendingComment(Request $request,DemandLetter $demandLetter)
+    {
+        $this->validate($request,[
+            'comment' => 'required',
+            'files' => 'required'
+        ]);
+        foreach($request->file('files') as $file)
+        {          
+            $data[]  =  $file->store('public/Attachment/DemandLetter/'.$demandLetter->id);
+        }
+        $demandLetter->update([
+            'sending_comments' => $request->comment,
+            'sending_attached_files' => $data
+        ]);
+        return redirect()->back();
+       //need to do upload multiple files
+
+    }
+
     public function showPassportList(DemandLetter $demandLetter)
     {
         $demandLetters = DemandLetter::with('nameList')->find($demandLetter)->first()->toArray();
@@ -187,14 +207,21 @@ class DemandLetterController extends Controller
         $collection = collect($demandLetters['name_list']);
         $filterResult = $collection->filter(function ($value,$key)
         {
-            return ($value['pivot']['passport_status']) && ($value['pivot']['contract_status']);
+            return ($value['pivot']['passport_status']) && ($value['pivot']['contract_status']) ;
         });
         $demandLetters['name_list'] = $filterResult->all();
         return view('demandletter.contractlist',['demandLetters' => $demandLetters]);
     }
 
-    public function showSendingList(Type $var = null)
+    public function showSendingList(DemandLetter $demandLetter)
     {
-        # code...
+        $demandLetters = DemandLetter::with('nameList')->find($demandLetter)->first()->toArray();
+        $collection = collect($demandLetters['name_list']);
+        $filterResult = $collection->filter(function ($value,$key)
+        {
+            return ($value['pivot']['passport_status']) && ($value['pivot']['contract_status']) && ($value['pivot']['sending_status']) ;
+        });
+        $demandLetters['name_list'] = $filterResult->all();
+        return view('demandletter.sendingList',['demandLetters' => $demandLetters]);
     }
 }

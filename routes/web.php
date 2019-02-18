@@ -26,6 +26,7 @@ Route::post('/demand_letter/update/{demandLetter}', 'DemandLetterController@upda
 Route::post('/demand_letter/comment/{demandLetter}', 'DemandLetterController@addComment');
 Route::post('/demand_letter/passport/comment/{demandLetter}', 'DemandLetterController@addPassportComment');
 Route::post('/demand_letter/contract/comment/{demandLetter}', 'DemandLetterController@addContractComment');
+Route::post('/demand_letter/sending/comment/{demandLetter}', 'DemandLetterController@addSendingComment');
 
 Route::get('/demand_letter/detail/{demandLetter}', 'DemandLetterController@show');
 Route::get('/demand_letter/passport/{demandLetter}', 'DemandLetterController@showPassportList');
@@ -35,8 +36,10 @@ Route::get('/demand_letter/sending/{demandLetter}', 'DemandLetterController@show
 Route::get('/worker/create/{demandLetterID}', 'NameListController@create');
 Route::get('/worker/passport/create/{demandLetterID}', 'NameListController@createPassport');
 Route::get('/worker/contract/create/{demandLetterID}', 'NameListController@createContract');
+Route::get('/worker/sending/create/{demandLetterID}', 'NameListController@createSending');
 Route::post('/worker/store', 'NameListController@store');
 Route::post('/worker/passport/update', 'NameListController@updatePassport');
 Route::post('/worker/contract/update', 'NameListController@updateContract');
+Route::post('/worker/sending/update', 'NameListController@updateSending');
 
-Route::post('/demand_letter/lock/{demandLetter}','DemandLetterController@lock');
+Route::get('/demand_letter/lock/{demandLetter}','DemandLetterController@lock')->middleware('auth');

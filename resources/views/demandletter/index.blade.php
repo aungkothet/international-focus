@@ -12,11 +12,14 @@
             </button>
         </div>    
         @endif
-        <div class="row">
+        <div class="row mb-4">
             <div class="col-md-4">
                 <a href="{{ url('demand_letter/create/'.$demandLetters->id) }}" class="btn btn-primary m-1">Add New Demand Letter</a>
             </div>
-            <div class="col-md-4 offset-md-4 ">
+            <div class="col-md-4">
+                <h5 class="text-center">Demand Letter List</h5>
+            </div>
+            <div class="col-md-4">
                 <a href="{{ url('/') }}" class="btn btn-danger m-1 float-right">Back To Company List</a>
             </div>
         </div>
@@ -47,12 +50,9 @@
                                 <td>{{ $demandletter->total }}</td>
                                 <td>
                                     <a href="{{ url('demand_letter/edit/'.$demandletter->id) }}" class="btn btn-info">Edit</a>
-                                    @auth
-                                    <form action="{{ url('demand_letter/lock/'.$demandletter->id)}}"  method="POST">
-                                        @csrf
-                                        <input type="submit" class="btn btn-primary {{ ($demandletter->lock_status)? 'disabled' :'' }}" value="{{ ($demandletter->lock_status)? 'Locked':'Lock' }}"/>
-                                    </form>
-                                    @endauth
+                                    @if ($demandletter->lock_status)
+                                        <img src="{{asset('svg/lock.png')}}" alt="locked" width="30px" height="30px">
+                                    @endif
                                 </td>
                             </tr>
                             @else
@@ -66,12 +66,7 @@
                                     <td>{{ $demandletter->total }}</td>
                                     <td>
                                         <a href="{{ url('demand_letter/edit/'.$demandletter->id) }}" class="btn btn-info">Edit</a>
-                                        @auth
-                                        <form action="{{ url('demand_letter/lock/'.$demandletter->id)}}"  method="POST">
-                                            @csrf
-                                            <input type="submit" class="btn btn-primary" value="Lock"/>
-                                        </form>
-                                        @endauth
+                                        
                                     </td>
                                 </tr>
                                 @endif
