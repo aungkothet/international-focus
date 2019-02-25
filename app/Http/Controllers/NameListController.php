@@ -49,6 +49,7 @@ class NameListController extends Controller
             'address' => 'required',
             'photo' => 'required'
         ]);
+        $photoPath = $request->file('photo')->store('public/workerPhoto');
         $unique_id = strtoupper(bin2hex(openssl_random_pseudo_bytes(4)));
         $pngImage = QrCode::format('png')
         ->size(500)->errorCorrection('H')
@@ -64,7 +65,7 @@ class NameListController extends Controller
             'nrc_mm' => $request->nrc,
             'dob_mm' => $request->dob,
             'address_mm' => $request->address,
-            'photo' => $request->file('photo')->store('public/workerPhoto'),
+            'photo' => $photoPath,
             'unique_id' => $unique_id ,
             'qrcode' => $qr_name
         ]);      
