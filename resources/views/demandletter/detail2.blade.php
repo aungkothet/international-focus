@@ -45,7 +45,7 @@
                             <tr>
                                 <td>{{ $i++ }}</td>
                                 <td>
-                                    <img src="{{ Storage::url(str_replace('public','',$name_list['photo'])) }}" class="rounded" width="50px" height="50px" >
+                                    <img src="{{ url(Storage::url(str_replace('public','',$name_list['photo']))) }}" class="rounded" width="50px" height="50px" >
                                 </td>
                                 <td>{{ $name_list['name_eng'] }}</td>
                                 <td>{{ $name_list['unique_id']}}</td>
