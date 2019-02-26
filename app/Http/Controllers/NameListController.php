@@ -54,10 +54,10 @@ class NameListController extends Controller
         $pngImage = QrCode::format('png')
         ->size(500)->errorCorrection('H')
         ->generate($unique_id);
-        $qr_name = 'storage/workerPhoto/'. $unique_id .'.png';
+        $qr_name = storage_path('app/public/workerPhoto/'. $unique_id .'.png');
         file_put_contents($qr_name ,$pngImage);
         
-        $qr_name = \str_replace('storage/','public/',$qr_name);
+        $qr_name = 'public/workerPhoto/'.$unique_id .'.png';
         $nameList = NameList::create([
             'name_mm' => $request->name ,
             'father_name_mm' => $request->fatherName,
