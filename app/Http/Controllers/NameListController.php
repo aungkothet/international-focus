@@ -96,7 +96,7 @@ class NameListController extends Controller
      */
     public function edit(NameList $nameList)
     {
-        //
+        return view('worker.edit1',['workerDetail' => $nameList]);
     }
 
     /**
@@ -108,7 +108,10 @@ class NameListController extends Controller
      */
     public function update(Request $request, NameList $nameList)
     {
-        //
+        $nameList->update([
+
+        ]);
+        
     }
 
     /**
