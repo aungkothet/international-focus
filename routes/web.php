@@ -35,7 +35,11 @@ Route::get('/demand_letter/contract/{demandLetter}', 'DemandLetterController@sho
 Route::get('/demand_letter/sending/{demandLetter}', 'DemandLetterController@showSendingList');
 
 Route::get('/worker/create/{demandLetterID}', 'NameListController@create');
-Route::get('/worker/edit/{nameList}', 'NameListController@edit');
+Route::get('/worker/edit/{nameList}/{demandLetterID}', 'NameListController@edit');
+Route::get('/worker/editpassport/{nameList}/{demandLetterID}', 'NameListController@editPassport');
+Route::post('/worker/updatePassport/{nameList}', 'NameListController@passportUpdate');
+
+
 Route::get('/worker/passport/create/{demandLetterID}', 'NameListController@createPassport');
 Route::get('/worker/contract/create/{demandLetterID}', 'NameListController@createContract');
 Route::get('/worker/sending/create/{demandLetterID}', 'NameListController@createSending');

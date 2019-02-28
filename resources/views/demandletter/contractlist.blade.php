@@ -36,7 +36,7 @@
                             <th>NRC</th>
                             <th>Gender</th>
                             <th>Address</th>
-                            <th>Operation</th>
+                            {{-- <th>Operation</th> --}}
                         </tr>
                     </thead>
                     <tbody>
@@ -51,9 +51,9 @@
                                 <td>{{ $name_list['nrc_eng'] }}</td>
                                 <td>{{ $name_list['gender_eng'] }}</td>
                                 <td>{{ $name_list['address_eng'] }}</td>
-                                <td>
+                                {{-- <td>
                                     <a href="{{ url('worker/edit/'.$name_list['id']) }}" class="btn btn-info">Edit</a>
-                                </td>
+                                </td> --}}
                             </tr>
                         @endforeach
                     </tbody>

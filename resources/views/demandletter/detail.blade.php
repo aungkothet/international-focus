@@ -54,7 +54,7 @@
                                 <td>{{ $name_list['gender_mm'] }}</td>
                                 <td>{{ $name_list['address_mm'] }}</td>
                                 <td>
-                                    <a href="{{ url('worker/edit/'.$name_list['id']) }}" class="btn btn-info">Edit</a>
+                                    <a href="{{ url('worker/edit/'.$name_list['id'].'/'.$demandLetters['id']) }}" class="btn btn-info">Edit</a>
                                     <a href="{{ url('qrcode/download/'.$name_list['id']) }}" class="btn btn-info">Download Qr</a>
                                 </td>
                             </tr>

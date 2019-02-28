@@ -94,10 +94,18 @@ class NameListController extends Controller
      * @param  \App\NameList  $nameList
      * @return \Illuminate\Http\Response
      */
-    public function edit(NameList $nameList)
+    public function edit(NameList $nameList,$demandLetterID)
     {
-        return view('worker.edit1',['workerDetail' => $nameList]);
+        return view('worker.edit_namelist',['workerDetail' => $nameList, 'demandLetterID' => $demandLetterID]);
     }
+
+    public function editPassport(NameList $nameList,$demandLetterID)
+    {
+        return view('worker.edit_passport',['workerDetail' => $nameList, 'demandLetterID' => $demandLetterID]);
+    }
+
+
+    
 
     /**
      * Update the specified resource in storage.
@@ -108,10 +116,59 @@ class NameListController extends Controller
      */
     public function update(Request $request, NameList $nameList)
     {
-        $nameList->update([
-
+        $this->validate($request,[
+            'name' => 'required',
+            'fatherName' => 'required',
+            'gender' => 'required',
+            'nrc' => 'required',
+            'dob' => ['required', new OlderThan(18)],
+            'address' => 'required',
+           
         ]);
+        if($request->file('photo'))
+        {
+            $photoPath = $request->file('photo')->store('public/workerPhoto');
+        } else {
+            $photoPath = '';
+        }
+
+        $nameList->update([
+            'name_mm' => $request->name ,
+            'father_name_mm' => $request->fatherName,
+            'gender_mm' => $request->gender,
+            'nrc_mm' => $request->nrc,
+            'dob_mm' => $request->dob,
+            'address_mm' => $request->address,
+            'photo' => ($photoPath)? $photoPath : $nameList->photo
+        ]);      
         
+        return \redirect()->back()->with('status',"Update Success");
+        
+    }
+
+    public function passportUpdate(Request $request, NameList $nameList)
+    {
+        $this->validate($request,[
+            'name' => 'required',
+            'fatherName' => 'required',
+            'gender' => 'required',
+            'nrc' => 'required',
+            'dob' => ['required', new OlderThan(18)],
+            'address' => 'required',
+           
+        ]);
+
+        $nameList->update([
+            'name_eng' => $request->name ,
+            'father_name_eng' => $request->fatherName,
+            'gender_eng' => $request->gender,
+            'nrc_eng' => $request->nrc,
+            'dob_eng' => $nameList->dob_mm,
+            'address_eng' => $request->address,
+            'passport_no' => $request->passport,
+            'issue_date_of_passport' => $request->passport_issue_date,
+        ]);
+        return \redirect()->back()->with('status',"Update Success");
     }
 
     /**
