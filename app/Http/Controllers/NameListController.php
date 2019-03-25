@@ -44,7 +44,7 @@ class NameListController extends Controller
             'name' => 'required',
             'fatherName' => 'required',
             'gender' => 'required',
-            'nrc' => 'required',
+            'nrc' => 'required|unique:name_lists,nrc_mm',
             'dob' => ['required', new OlderThan(18)],
             'address' => 'required',
             'photo' => 'required'
@@ -103,9 +103,6 @@ class NameListController extends Controller
     {
         return view('worker.edit_passport',['workerDetail' => $nameList, 'demandLetterID' => $demandLetterID]);
     }
-
-
-    
 
     /**
      * Update the specified resource in storage.
@@ -207,7 +204,8 @@ class NameListController extends Controller
             'passport_no' => $request->passport_no,
             'issue_date_of_passport' => $request->passport_issue_date,
         ]);
-        $demandLetterNameList = DemandLetterNameList::where('demand_letter_id',$request->demandLetterID)->where('name_list_id',$request->nameListID)->first();
+        $demandLetterNameList = DemandLetterNameList::where('demand_letter_id',$request->demandLetterID)
+            ->where('name_list_id',$request->nameListID)->first();
         $demandLetterNameList->update(['passport_status'=>1]);
         
         return redirect()->back();
@@ -263,5 +261,5 @@ class NameListController extends Controller
     {
         return Storage::download($nameList->qrcode,$nameList->unique_id.'.png');
     }
-    
+   
 }
