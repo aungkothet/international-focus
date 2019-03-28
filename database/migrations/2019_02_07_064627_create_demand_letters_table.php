@@ -18,20 +18,11 @@ class CreateDemandLettersTable extends Migration
             $table->integer('company_id');
             $table->date('date')->nullable();
             $table->string('demand_no');
-            $table->integer('male_count')->default(0);
-            $table->integer('female_count')->default(0);
-            $table->integer('total')->default(0);
-            $table->json('demand_attached_files')->nullable();//for multi image location save
-            $table->text('comments')->nullable();
-            $table->json('passport_attached_files')->nullable();//for multi image location save
-            $table->text('passport_comments')->nullable();
-            $table->json('contract_attached_files')->nullable();//for multi image location save
-            $table->text('contract_comments')->nullable();
-            $table->json('sending_attached_files')->nullable();//for multi image location save
-            $table->text('sending_comments')->nullable();
+            $table->json('count')->nullable();
+            $table->json('attached_files')->nullable();
+            $table->json('comments')->nullable();
             $table->integer('lock_status')->default(0);//0 unlock, 1 lock
-            $table->json('summary_attached_files')->nullable();
-            $table->text('summary_comments')->nullable();
+            $table->integer('status')->default(0);
             $table->softDeletes();
             $table->timestamps();
         });

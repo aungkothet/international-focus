@@ -120,7 +120,26 @@
                                     <strong>{{ $errors->first('passport_issue_date') }}</strong>
                                 </span>
                             @endif
-                        </div>                     
+                        </div>   
+                        <div class="form-group">
+                            <label for="photo">Photo (Optional)</label>
+                            <input type="file" class="form-control"  name="photo" id="photo">
+                            @if($errors->has('photo'))
+                                <span class="text-danger">
+                                    <strong>{{ $errors->first('photo') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                        <div class="form-group">
+                            <label for="religion">Religion<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control"  name="religion" required id="religion" placeholder="Enter Religion..." value="{{ old('religion') }}">
+                            @if($errors->has('religion'))
+                                <span class="text-danger">
+                                    <strong>{{ $errors->first('religion') }}</strong>
+                                </span>
+                            @endif
+                        </div> 
+
                         <button type="submit" class="btn btn-primary">Submit</button>
                         <a href="{{ url('demand_letter/detail/'.$demandLetterID) }}" class="btn btn-danger">Back To Detail</a>
                     </form> 

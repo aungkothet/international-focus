@@ -41,8 +41,8 @@
                     </thead>
                     <tbody>
                         @php $i=1; @endphp
-                        @foreach ($demandLetters['name_list'] as $key => $name_list)
-                            <tr>
+                        @foreach ($demandLetters['namelist'] as $key => $name_list)
+                            <tr class="{{ ($name_list['error_status'])? "bg-danger": ''}}">
                                 <td>{{ $i++ }}</td>
                                 <td>
                                     <img src="{{ url(Storage::url(str_replace('public','',$name_list['photo']))) }}" class="rounded" width="50px" height="50px" >
@@ -54,6 +54,7 @@
                                 <td>{{ $name_list['address_eng'] }}</td>
                                 <td>
                                     <a href="{{ url('worker/editpassport/'.$name_list['id'].'/'.$demandLetters['id']) }}" class="btn btn-info">Edit</a>
+                                    <a href="{{ url('worker/changeStatus/'.$name_list['id'].'/'.$demandLetters['id']) }}" class="btn btn-info">Wrong Info</a>
                                 </td>
                             </tr>
                         @endforeach
@@ -80,8 +81,8 @@
                                 @endif
                             </div>
                             <div class="form-group">
-                                <label for="photo">Attach File(s) Upload<span class="text-danger">*</span></label> 
-                                <input type="file"  name="files[]" required id="photo" placeholder="Upload photo.." multiple>
+                                <label for="photo">Attach File(s) Upload</label> 
+                                <input type="file"  name="files[]"  id="photo" placeholder="Upload photo.." multiple>
                                 @if($errors->has('photo'))
                                     <span class="text-danger">
                                         <strong>{{ $errors->first('photo') }}</strong>
@@ -97,7 +98,7 @@
         </div>
         <div class="row mt-3">
             <div class="col-md-4 ml-auto">               
-            <a href="{{ url('demand_letter/contract/'.$demandLetters['id']) }}" class="btn btn-primary m-1 float-right {{ ($demandLetters['passport_comments'])? :'disabled'}}">Next</a>
+            <a href="{{ url('demand_letter/contract/'.$demandLetters['id']) }}" class="btn btn-primary m-1 float-right {{ ($demandLetters['status'] == 2)? :'disabled'}}">Next</a>
             <button class="btn btn-primary m-1 float-right" id="btnNote">Note</a>
             </div>
         </div>

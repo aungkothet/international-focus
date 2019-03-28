@@ -38,7 +38,7 @@ Route::get('/worker/create/{demandLetterID}', 'NameListController@create');
 Route::get('/worker/edit/{nameList}/{demandLetterID}', 'NameListController@edit');
 Route::get('/worker/editpassport/{nameList}/{demandLetterID}', 'NameListController@editPassport');
 Route::post('/worker/updatePassport/{nameList}', 'NameListController@passportUpdate');
-
+Route::get('/worker/changeStatus/{nameList}/{demandLetterID}', 'NameListController@changeStatus');
 
 Route::get('/worker/passport/create/{demandLetterID}', 'NameListController@createPassport');
 Route::get('/worker/contract/create/{demandLetterID}', 'NameListController@createContract');
@@ -50,5 +50,6 @@ Route::post('/worker/contract/update', 'NameListController@updateContract');
 Route::post('/worker/sending/update', 'NameListController@updateSending');
 
 Route::get('/demand_letter/lock/{demandLetter}','DemandLetterController@lock')->middleware('auth');
+Route::get('demand_letter/unlock/{demandLetter}','DemandLetterController@unlock')->middleware('auth');
 
 Route::get('/qrcode/download/{nameList}','NameListController@downloadQR');

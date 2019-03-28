@@ -45,19 +45,20 @@ class NameListController extends Controller
             'fatherName' => 'required',
             'gender' => 'required',
             'nrc' => 'required|unique:name_lists,nrc_mm',
-            'dob' => ['required', new OlderThan(18)],
+            'dob' => 'required',
             'address' => 'required',
             'photo' => 'required'
         ]);
-        $photoPath = $request->file('photo')->store('public/workerPhoto');
         $unique_id = strtoupper(bin2hex(openssl_random_pseudo_bytes(4)));
+        $photoPath = $request->file('photo')->store('public/workerPhoto/'.$unique_id);
+       
         $pngImage = QrCode::format('png')
         ->size(500)->errorCorrection('H')
         ->generate($unique_id);
-        $qr_name = storage_path('app/public/workerPhoto/'. $unique_id .'.png');
+        $qr_name = storage_path('app/public/workerPhoto/'.$unique_id.'/'. $unique_id .'.png');
         file_put_contents($qr_name ,$pngImage);
         
-        $qr_name = 'public/workerPhoto/'.$unique_id .'.png';
+        $qr_name = 'public/workerPhoto/'.$unique_id.'/'.$unique_id .'.png';
         $nameList = NameList::create([
             'name_mm' => $request->name ,
             'father_name_mm' => $request->fatherName,
@@ -67,7 +68,11 @@ class NameListController extends Controller
             'address_mm' => $request->address,
             'photo' => $photoPath,
             'unique_id' => $unique_id ,
-            'qrcode' => $qr_name
+            'qrcode' => $qr_name,
+            'nrc_requirement' => $request->nrc_req,
+            'repersentative_name' => $request->representative_name,
+            'phone_number' => $request->phone_no,
+            'card_number' => $request->card_number
         ]);      
         
         DemandLetterNameList::create([
@@ -118,7 +123,7 @@ class NameListController extends Controller
             'fatherName' => 'required',
             'gender' => 'required',
             'nrc' => 'required',
-            'dob' => ['required', new OlderThan(18)],
+            'dob' => 'required',
             'address' => 'required',
            
         ]);
@@ -150,7 +155,7 @@ class NameListController extends Controller
             'fatherName' => 'required',
             'gender' => 'required',
             'nrc' => 'required',
-            'dob' => ['required', new OlderThan(18)],
+            'dob' => 'required',
             'address' => 'required',
            
         ]);
@@ -160,10 +165,11 @@ class NameListController extends Controller
             'father_name_eng' => $request->fatherName,
             'gender_eng' => $request->gender,
             'nrc_eng' => $request->nrc,
-            'dob_eng' => $nameList->dob_mm,
+            'dob_eng' => $nameList->dob,
             'address_eng' => $request->address,
             'passport_no' => $request->passport,
             'issue_date_of_passport' => $request->passport_issue_date,
+            'status' => 1
         ]);
         return \redirect()->back()->with('status',"Update Success");
     }
@@ -181,13 +187,10 @@ class NameListController extends Controller
 
     public function createPassport(DemandLetter $demandLetterID)
     {
-        $demandLetters = DemandLetter::with('nameList')->find($demandLetterID)->first()->toArray();
-        $collection = collect($demandLetters['name_list']);
-        $filterResult = $collection->filter(function ($value,$key)
-        {
-            return empty($value['passport_no']);
-        });
-        return view('worker.passport_create',['workerList' => $filterResult->all(), 'demandLetterID' => $demandLetters['id']]);
+        $demandLetters = $demandLetterID->with(['namelist' => function ($nameList) {
+            $nameList->whereStatus(0);
+         }])->first();
+        return view('worker.passport_create',['workerList' => $demandLetters->namelist, 'demandLetterID' => $demandLetters['id']]);
         
     }
 
@@ -203,9 +206,10 @@ class NameListController extends Controller
             'address_eng' => $request->address,
             'passport_no' => $request->passport_no,
             'issue_date_of_passport' => $request->passport_issue_date,
+            'religion' => $request->religion
         ]);
         $demandLetterNameList = DemandLetterNameList::where('demand_letter_id',$request->demandLetterID)
-            ->where('name_list_id',$request->nameListID)->first();
+            ->whereNameListId($request->nameListID)->first();
         $demandLetterNameList->update(['passport_status'=>1]);
         
         return redirect()->back();
@@ -213,37 +217,32 @@ class NameListController extends Controller
 
     public function createContract(DemandLetter $demandLetterID)
     {
-        $demandLetters = DemandLetter::with('nameList')->find($demandLetterID)->first()->toArray();
-        $collection = collect($demandLetters['name_list']);
-        $filterResult = $collection->filter(function ($value,$key)
-        {
-            return ($value['pivot']['passport_status']) && (!$value['pivot']['contract_status']);
-        });
-        return view('worker.contract_create',['workerList' => $filterResult->all(), 'demandLetterID' => $demandLetters['id']]);
+        $demandLetters = $demandLetterID->with(['namelist' => function ($nameList) {
+            $nameList->whereStatus(1);
+         }])->first();
+        return view('worker.contract_create',['workerList' => $demandLetters->namelist, 'demandLetterID' => $demandLetters->id]);
     }
 
     public function updateContract(Request $request)
     {
-        $demandLetterNameList = DemandLetterNameList::where('demand_letter_id',$request->demandLetterID)->where('name_list_id',$request->nameListID)->first();
+        $demandLetterNameList = DemandLetterNameList::whereDemandLetterId($request->demandLetterID)->whereNameListId($request->nameListID)->first();
         $demandLetterNameList->update([
             'contract_status'=>1,
             'labour_card_no' => $request->labourcard_no,
             'issue_labour_date' => $request->issue_labour_date,
-            'salary' => $request->salary
-            ]);
+            'salary' => $request->salary,
+            'status' => 2
+        ]);
         
         return redirect()->back();
     }
 
     public function createSending(DemandLetter $demandLetterID)
     {
-        $demandLetters = DemandLetter::with('nameList')->find($demandLetterID)->first()->toArray();
-        $collection = collect($demandLetters['name_list']);
-        $filterResult = $collection->filter(function ($value,$key)
-        {
-            return ($value['pivot']['passport_status'])  && ($value['pivot']['contract_status']) && (!$value['pivot']['sending_status']);
-        });
-        return view('worker.sending_create',['workerList' => $filterResult->all(), 'demandLetterID' => $demandLetters['id']]);
+        $demandLetters = $demandLetterID->with(['namelist' => function ($nameList) {
+            $nameList->whereStatus(2);
+         }])->first();
+        return view('worker.sending_create',['workerList' => $demandLetters->namelist, 'demandLetterID' => $demandLetters['id']]);
     }
 
     public function updateSending(Request $request)
@@ -262,4 +261,11 @@ class NameListController extends Controller
         return Storage::download($nameList->qrcode,$nameList->unique_id.'.png');
     }
    
+    public function changeStatus(NameList $nameList,$demandLetterID)
+    {
+        $nameList->update([
+            'error_status' => 1,
+        ]);
+        return \redirect('/demand_letter/passport/'.$demandLetterID);
+    }
 }

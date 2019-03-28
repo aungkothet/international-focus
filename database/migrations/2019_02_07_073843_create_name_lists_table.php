@@ -14,7 +14,7 @@ class CreateNameListsTable extends Migration
     public function up()
     {
         Schema::create('name_lists', function (Blueprint $table) {
-            $table->increments('id');//workerID
+            $table->increments('id');
             $table->string('name_mm')->nullable();
             $table->string('name_eng')->nullable();
             $table->string('father_name_mm')->nullable();
@@ -33,6 +33,13 @@ class CreateNameListsTable extends Migration
             $table->string('photo')->nullable();
             $table->string('unique_id')->nullable();
             $table->string('qrcode')->nullable();
+            $table->boolean('error_status')->default(0);
+            $table->string('nrc_requirement')->nullable();
+            $table->string('repersentative_name')->nullable();
+            $table->string('phone_number')->nullable();
+            $table->string('card_number')->nullable();
+            $table->string('religion')->nullable();
+            $table->integer('status')->default(0); 
             $table->timestamps();
         });
     }

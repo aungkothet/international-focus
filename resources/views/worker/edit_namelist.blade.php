@@ -59,7 +59,7 @@
                         </div>
                         <div class="form-group">
                             <label for="dob">Date of Birth<span class="text-danger">*</span></label>
-                            <input type="date" class="form-control" name="dob" required id="dob" placeholder="Enter Date of Birth.." value="{{ (old('dob'))? old('dob') : $workerDetail->dob_mm }}">
+                            <input type="text" class="form-control" name="dob" required id="dob" placeholder="Enter Date of Birth.." value="{{ (old('dob'))? old('dob') : $workerDetail->dob_mm }}">
                             @if($errors->has('dob'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('dob') }}</strong>

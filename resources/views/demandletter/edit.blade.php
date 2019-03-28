@@ -18,15 +18,18 @@
                         <input type="hidden" name="companyID" value="{{ $demandletter->company_id }}">
                         <div class="form-group">
                             <label for="demandletterno">Demand Letter No</label>
-                            <input type="text" class="form-control" name="demand_no" required id="demandletterno" value="{{$demandletter->demand_no}}" placeholder="Enter Demand Letter No..">
+                            <input type="text" class="form-control" name="demand_no" required id="demandletterno" 
+                            value="{{$demandletter->demand_no}}" placeholder="Enter Demand Letter No..">
                         </div>
                         <div class="form-group">
                             <label for="malecount">Male Count</label>
-                            <input type="number" class="form-control" name="male_count" required min="0" step="1" id="malecount" value="{{$demandletter->male_count}}" placeholder="Enter total number of male..">
+                            <input type="number" class="form-control" name="male_count" required min="0" step="1" 
+                            id="malecount" value="{{$demandletter->count['male_count']}}" 
+                            placeholder="Enter total number of male..">
                         </div>
                         <div class="form-group">
                             <label for="femalecount">Female Count</label>
-                            <input type="number" class="form-control" name="female_count" required min="0" step="1" id="femalecount" value="{{$demandletter->female_count}}" placeholder="Enter total number of female..">
+                            <input type="number" class="form-control" name="female_count" required min="0" step="1" id="femalecount" value="{{$demandletter->count['female_count']}}" placeholder="Enter total number of female..">
                         </div>
                         <div class="form-group">
                             <label for="damanddate">Demand Date</label>

@@ -11,14 +11,12 @@ class DemandLetter extends Model
 
     protected $dates = ['deleted_at'];
     
-    protected $fillable = ['contract_attached_files','contract_comments','company_id','date','demand_no','male_count','female_count','total','demand_attached_files','comments','lock_status','passport_attached_files','passport_comments','sending_attached_files','sending_comments','summary_attached_files','summary_comments'];
+    protected $fillable = ['company_id','date','demand_no','count','attached_files','comments','lock_status','status'];
 
     protected $casts = [
-        'demand_attached_files' => 'array',
-        'summary_attached_files' => 'array',
-        'passport_attached_files' => 'array',
-        'contract_attached_files' => 'array',
-        'sending_attached_files' => 'array'
+        'count' => 'array',
+        'attached_files' => 'array',
+        'comments' => 'array'
     ];
 
     public function company()
@@ -28,6 +26,6 @@ class DemandLetter extends Model
 
     public function nameList()
     {
-        return $this->belongsToMany('App\NameList', 'demand_letter_name_lists', 'demand_letter_id','name_list_id')->withPivot('labour_card_no','issue_labour_date','identification_card','issue_date_of_id_card','salary','passport_status','contract_status','sending_status');
+        return $this->belongsToMany('App\NameList', 'demand_letter_name_lists', 'demand_letter_id','name_list_id')->withPivot('labour_card_no','issue_labour_date','identification_card','issue_date_of_id_card','salary');
     }
 }

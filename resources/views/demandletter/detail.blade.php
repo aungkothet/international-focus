@@ -82,8 +82,8 @@
                                 @endif
                             </div>
                             <div class="form-group">
-                                <label for="photo">Attach File(s) Upload<span class="text-danger">*</span></label> 
-                                <input type="file"  name="files[]" required id="photo" placeholder="Upload photo.." multiple>
+                                <label for="photo">Attach File(s) Upload</label> 
+                                <input type="file"  name="files[]" id="photo" placeholder="Upload photo.." multiple>
                                 @if($errors->has('photo'))
                                     <span class="text-danger">
                                         <strong>{{ $errors->first('photo') }}</strong>
@@ -99,7 +99,7 @@
         </div>
         <div class="row mt-3">
             <div class="col-md-4 ml-auto">               
-            <a href="{{ url('demand_letter/passport/'.$demandLetters['id']) }}" class="btn btn-primary m-1 float-right {{ ($demandLetters['comments'])? :'disabled'}}">Next</a>
+            <a href="{{ url('demand_letter/passport/'.$demandLetters['id']) }}" class="btn btn-primary m-1 float-right {{ ($demandLetters['status'] >= 1 )? :'disabled'}}">Next</a>
             <button class="btn btn-primary m-1 float-right" id="btnNote">Note</a>
             </div>
         </div>

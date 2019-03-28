@@ -54,7 +54,7 @@
                         </div>
                         <div class="form-group">
                             <label for="dob">Date of Birth<span class="text-danger">*</span></label>
-                            <input type="date" class="form-control" name="dob" required id="dob" placeholder="Enter Date of Birth.." value="{{ old('dob') }}">
+                            <input type="text" class="form-control" name="dob" required id="dob" placeholder="Enter Date of Birth.." value="{{ old('dob') }}">
                             @if($errors->has('dob'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('dob') }}</strong>
@@ -79,6 +79,46 @@
                                 </span>
                             @endif
                         </div>
+
+                        
+                        <div class="form-group">
+                            <label for="nrc_req">NRC Requirement</label>
+                            <input type="text" class="form-control" name="nrc_req"  id="nrc_req" placeholder="Enter NRC requirement" value="{{ old('nrc_req') }}">
+                            @if($errors->has('nrc_req'))
+                                <span class="text-danger">
+                                    <strong>{{ $errors->first('nrc_req') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                        <div class="form-group">
+                            <label for="representative_name">Representative Name</label>
+                            <input type="text" class="form-control" name="representative_name"  id="representative_name" placeholder="Enter representative name" value="{{ old('representative_name') }}">
+                            @if($errors->has('representative_name'))
+                                <span class="text-danger">
+                                    <strong>{{ $errors->first('representative_name') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                        <div class="form-group">
+                            <label for="phone_no">Phone Number</label>
+                            <input type="text" class="form-control" name="phone_no"  id="phone_no" placeholder="Enter Phone Number" value="{{ old('phone_no') }}">
+                            @if($errors->has('phone_no'))
+                                <span class="text-danger">
+                                    <strong>{{ $errors->first('phone_no') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                        <div class="form-group">
+                            <label for="card_number">ခ်ိတ္ကဒ္ Number</label>
+                            <input type="text" class="form-control" name="card_number"  id="card_number" placeholder="Enter Phone Number" value="{{ old('card_number') }}">
+                            @if($errors->has('card_number'))
+                                <span class="text-danger">
+                                    <strong>{{ $errors->first('card_number') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+
+
                         <button type="submit" class="btn btn-primary">Submit</button>
                         <a href="{{ url('demand_letter/detail/'.$demandLetterID) }}" class="btn btn-danger">Back To Detail</a>
                     </form>

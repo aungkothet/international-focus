@@ -14,10 +14,9 @@ class DemandLetterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request,$id)
+    public function index($id)
     {
         $demandLetters = Company::with('demandletter')->find($id);
-        // dd($demandLetters->toArray());
         return view('demandletter.index',['demandLetters' => $demandLetters]);
     }
 
@@ -26,7 +25,7 @@ class DemandLetterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request,$companyID)
+    public function create($companyID)
     {
         return view('demandletter.create',['companyID' => $companyID]);
     }
@@ -39,14 +38,16 @@ class DemandLetterController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
         DemandLetter::create([
             'company_id' => $request->companyID,
             'date' => $request->demand_date,
             'demand_no' => $request->demand_no,
-            'male_count' => $request->male_count,
-            'female_count' => $request->female_count,
-            'total' => ($request->male_count + $request->female_count)
+            'count' => [
+                'male_count' => $request->male_count,
+                'female_count' => $request->female_count,
+                'total' => ($request->male_count + $request->female_count)
+            ],
+
         ]);
         return redirect('demand_letters/'.$request->companyID)->with("status",'Saved Success!');
     }
@@ -67,6 +68,14 @@ class DemandLetterController extends Controller
     {
         $demandLetter->update([
             'lock_status' => 1
+        ]);
+         return redirect('/');
+    }
+
+    public function unlock(Request $request,DemandLetter $demandLetter)
+    {
+        $demandLetter->update([
+            'lock_status' => 0
         ]);
          return redirect('/');
     }
@@ -94,9 +103,11 @@ class DemandLetterController extends Controller
             'company_id' => $request->companyID,
             'date' => $request->demand_date,
             'demand_no' => $request->demand_no,
-            'male_count' => $request->male_count,
-            'female_count' => $request->female_count,
-            'total' => ($request->male_count + $request->female_count)
+            'count' => [
+                'male_count' => $request->male_count,
+                'female_count' => $request->female_count,
+                'total' => ($request->male_count + $request->female_count)
+            ],
         ]);
         return redirect('demand_letters/'.$request->companyID)->with("status",'Update Success!');
 
@@ -117,129 +128,152 @@ class DemandLetterController extends Controller
     {
         $this->validate($request,[
             'comment' => 'required',
-            'files' => 'required'
         ]);
-        foreach($request->file('files') as $file)
-        {          
-            $data[]  =  $file->store('public/Attachment/DemandLetter/'.$demandLetter->id);
+        $data = $demandLetter->attached_files;
+        $comment =$demandLetter->comments;
+        
+        if($request->file('files')) {
+            foreach($request->file('files') as $file)
+            {          
+                $data['demand_attachments'][]  =  $file->store('public/Attachment/DemandLetter/'.$demandLetter->id.'/NameListAttachments');
+            }
         }
+        else{
+            $data['demand_attachments']=[];
+        }
+        $comment['demand_comments'] = $request->comment;
         $demandLetter->update([
-            'comments' => $request->comment,
-            'demand_attached_files' => $data
+            'comments' => $comment,
+            'attached_files' => $data,
+            'status' => 1
         ]);
         return \redirect()->back();
-       //need to do upload multiple files
 
     }
 
     public function addPassportComment(Request $request,DemandLetter $demandLetter)
     {
         $this->validate($request,[
-            'comment' => 'required',
-            'files' => 'required'
+            'comment' => 'required'
         ]);
-        foreach($request->file('files') as $file)
-        {          
-            $data[]  =  $file->store('public/Attachment/DemandLetter/'.$demandLetter->id);
+        $data = $demandLetter->attached_files;
+        $comment =$demandLetter->comments;
+        if($request->file('files')) {
+            foreach($request->file('files') as $file)
+            {          
+                $data['passport_attachments'][]  =  $file->store('public/Attachment/DemandLetter/'.$demandLetter->id.'/PassportAttachments');
+            }
         }
+        else{
+            $data['passport_attachments']=[];
+        }
+        $comment['passport_comments'] = $request->comment;
         $demandLetter->update([
-            'passport_comments' => $request->comment,
-            'passport_attached_files' => $data
+            'comments' => $comment,
+            'attached_files' => $data,
+            'status' => 2
         ]);
         return \redirect()->back();
-       //need to do upload multiple files
 
     }
     
     public function addContractComment(Request $request,DemandLetter $demandLetter)
     {
         $this->validate($request,[
-            'comment' => 'required',
-            'files' => 'required'
+            'comment' => 'required'
         ]);
-        foreach($request->file('files') as $file)
-        {          
-            $data[]  =  $file->store('public/Attachment/DemandLetter/'.$demandLetter->id);
+        $data = $demandLetter->attached_files;
+        $comment =$demandLetter->comments;
+        if($request->file('files')) {
+            foreach($request->file('files') as $file)
+            {          
+                $data['contract_attachments'][]  =  $file->store('public/Attachment/DemandLetter/'.$demandLetter->id.'/ContractAttachments');
+            }
         }
+        else{
+            $data['contract_attachments']=[];
+        }
+        $comment['contract_comments'] = $request->comment;
         $demandLetter->update([
-            'contract_comments' => $request->comment,
-            'contract_attached_files' => $data
+            'comments' => $comment,
+            'attached_files' => $data,
+            'status' => 3
         ]);
-        return redirect()->back();
-       //need to do upload multiple files
-
+        return \redirect()->back();
     }
 
     public function addSendingComment(Request $request,DemandLetter $demandLetter)
     {
         $this->validate($request,[
-            'comment' => 'required',
-            'files' => 'required'
+            'comment' => 'required'
         ]);
-        foreach($request->file('files') as $file)
-        {          
-            $data[]  =  $file->store('public/Attachment/DemandLetter/'.$demandLetter->id);
+        $data = $demandLetter->attached_files;
+        $comment =$demandLetter->comments;
+        if($request->file('files')) {
+            foreach($request->file('files') as $file)
+            {          
+                $data['sending_attachments'][]  =  $file->store('public/Attachment/DemandLetter/'.$demandLetter->id.'/SendingAttachments');
+            }
         }
+        else{
+            $data['sending_attachments']=[];
+        }
+        $comment['sending_comments'] = $request->comment;
         $demandLetter->update([
-            'sending_comments' => $request->comment,
-            'sending_attached_files' => $data
+            'comments' => $comment,
+            'attached_files' => $data,
+            'status' => 4
         ]);
-        return redirect()->back();
-       //need to do upload multiple files
-
+        return \redirect()->back();
     }
 
     public function addSummaryComment(Request $request,DemandLetter $demandLetter)
     {
         $this->validate($request,[
-            'comment' => 'required',
-            'files' => 'required'
+            'comment' => 'required'
         ]);
-        foreach($request->file('files') as $file)
-        {          
-            $data[]  =  $file->store('public/Attachment/DemandLetter/'.$demandLetter->id);
+        $data = $demandLetter->attached_files;
+        $comment =$demandLetter->comments;
+        if($request->file('files')) {
+            foreach($request->file('files') as $file)
+            {          
+                $data['sending_attachments'][]  =  $file->store('public/Attachment/DemandLetter/'.$demandLetter->id.'/SendingAttachments');
+            }
         }
+        else{
+            $data['sending_attachments']=[];
+        }
+        $comment['sending_comments'] = $request->comment;
         $demandLetter->update([
-            'summary_comments' => $request->comment,
-            'summary_attached_files' => $data
+            'comments' => $comment,
+            'attached_files' => $data,
+            'status' => 5
         ]);
-        return redirect()->back();
+        return \redirect()->back();
     }
 
 
     public function showPassportList(DemandLetter $demandLetter)
     {
-        $demandLetters = DemandLetter::with('nameList')->find($demandLetter)->first()->toArray();
-        $collection = collect($demandLetters['name_list']);
-        $filterResult = $collection->filter(function ($value,$key)
-        {
-            return !empty($value['passport_no']);
-        });
-        $demandLetters['name_list'] = $filterResult->all();
-        return view('demandletter.detail2',['demandLetters' => $demandLetters]);
+        $demandLetters = DemandLetter::with(['namelist' => function ($nameList) {
+            $nameList->where('status','>=',1);
+         }])->find($demandLetter)->first();
+        return view('demandletter.detail2',['demandLetters' => $demandLetters->toArray()]);
     }
 
     public function showContractList(DemandLetter $demandLetter)
     {
-        $demandLetters = DemandLetter::with('nameList')->find($demandLetter)->first()->toArray();
-        $collection = collect($demandLetters['name_list']);
-        $filterResult = $collection->filter(function ($value,$key)
-        {
-            return ($value['pivot']['passport_status']) && ($value['pivot']['contract_status']) ;
-        });
-        $demandLetters['name_list'] = $filterResult->all();
-        return view('demandletter.contractlist',['demandLetters' => $demandLetters]);
+        $demandLetters = DemandLetter::with(['namelist' => function ($nameList) {
+            $nameList->where('status','>=',2);
+         }])->find($demandLetter)->first();
+        return view('demandletter.contractlist',['demandLetters' => $demandLetters->toArray()]);
     }
 
     public function showSendingList(DemandLetter $demandLetter)
     {
-        $demandLetters = DemandLetter::with('nameList')->find($demandLetter)->first()->toArray();
-        $collection = collect($demandLetters['name_list']);
-        $filterResult = $collection->filter(function ($value,$key)
-        {
-            return ($value['pivot']['passport_status']) && ($value['pivot']['contract_status']) && ($value['pivot']['sending_status']) ;
-        });
-        $demandLetters['name_list'] = $filterResult->all();
-        return view('demandletter.sendingList',['demandLetters' => $demandLetters]);
+        $demandLetters = DemandLetter::with(['namelist' => function ($nameList) {
+            $nameList->where('status','>=',3);
+         }])->find($demandLetter)->first();
+        return view('demandletter.sendingList',['demandLetters' => $demandLetters->toArray()]);
     }
 }

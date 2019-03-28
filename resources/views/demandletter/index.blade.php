@@ -45,13 +45,14 @@
                                 <td>{{ $key+1 }}</td>
                                 <td>{{ date('d-M-Y', strtotime($demandletter->date)) }}</td>
                                 <td><a href="{{ url('demand_letter/detail/'.$demandletter->id) }}"> {{ $demandletter->demand_no }} </a></td>
-                                <td>{{ $demandletter->male_count }}</td>
-                                <td>{{ $demandletter->female_count }}</td>
-                                <td>{{ $demandletter->total }}</td>
+                                <td>{{ $demandletter->count['male_count'] }}</td>
+                                <td>{{ $demandletter->count['female_count'] }}</td>
+                                <td>{{ $demandletter->count['total'] }}</td>
                                 <td>
                                     <a href="{{ url('demand_letter/edit/'.$demandletter->id) }}" class="btn btn-info">Edit</a>
                                     @if ($demandletter->lock_status)
-                                        <img src="{{asset('svg/lock.png')}}" alt="locked" width="30px" height="30px">
+                                        
+                                        <a href="{{ url('demand_letter/unlock/'.$demandletter->id) }}" class="btn btn-info"><img src="{{asset('svg/lock.png')}}" alt="locked" width="30px" height="30px"></a>
                                     @endif
                                 </td>
                             </tr>
@@ -61,12 +62,11 @@
                                     <td>{{ $i++ }}</td>
                                     <td>{{ date('d-M-Y', strtotime($demandletter->date)) }}</td>
                                     <td><a href="{{ url('demand_letter/detail/'.$demandletter->id) }}"> {{ $demandletter->demand_no }} </a></td>
-                                    <td>{{ $demandletter->male_count }}</td>
-                                    <td>{{ $demandletter->female_count }}</td>
-                                    <td>{{ $demandletter->total }}</td>
+                                    <td>{{ $demandletter->count['male_count'] }}</td>
+                                    <td>{{ $demandletter->count['female_count'] }}</td>
+                                    <td>{{ $demandletter->count['total'] }}</td>
                                     <td>
                                         <a href="{{ url('demand_letter/edit/'.$demandletter->id) }}" class="btn btn-info">Edit</a>
-                                        
                                     </td>
                                 </tr>
                                 @endif

@@ -40,7 +40,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($demandLetters['name_list'] as $key => $name_list)
+                        @foreach ($demandLetters['namelist'] as $key => $name_list)
                             <tr>
                                 <td>{{ $key+1 }}</td>
                                 <td>
@@ -96,7 +96,7 @@
         </div>
         <div class="row mt-3">
             <div class="col-md-4 ml-auto">               
-            <a href="{{ url('demand_letter/sending/'.$demandLetters['id']) }}" class="btn btn-primary m-1 float-right {{ ($demandLetters['contract_comments'])? :'disabled'}}">Next</a>
+            <a href="{{ url('demand_letter/sending/'.$demandLetters['id']) }}" class="btn btn-primary m-1 float-right {{ ($demandLetters['status'] == 3 )? :'disabled'}}">Next</a>
             <button class="btn btn-primary m-1 float-right" id="btnNote">Note</a>
             </div>
         </div>
