@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\BladeExport;
 use App\Company;
 use App\DemandLetter;
 use App\DemandLetterNameList;
+use App\NameList;
+use Excel;
 use Illuminate\Http\Request;
 
 class DemandLetterController extends Controller
@@ -69,7 +72,7 @@ class DemandLetterController extends Controller
         $demandLetter->update([
             'lock_status' => 1
         ]);
-         return redirect('/');
+         return redirect()->back();
     }
 
     public function unlock(Request $request,DemandLetter $demandLetter)
@@ -77,7 +80,7 @@ class DemandLetterController extends Controller
         $demandLetter->update([
             'lock_status' => 0
         ]);
-         return redirect('/');
+         return redirect()->back();
     }
     /**
      * Show the form for editing the specified resource.
@@ -151,6 +154,32 @@ class DemandLetterController extends Controller
 
     }
 
+    public function addToDoPassportComment(Request $request,DemandLetter $demandLetter)
+    {
+        $this->validate($request,[
+            'comment' => 'required'
+        ]);
+        $data = $demandLetter->attached_files;
+        $comment =$demandLetter->comments;
+        if($request->file('files')) {
+            foreach($request->file('files') as $file)
+            {          
+                $data['todopassport_attachments'][]  =  $file->store('public/Attachment/DemandLetter/'.$demandLetter->id.'/ToDoPassportAttachments');
+            }
+        }
+        else{
+            $data['todopassport_attachments']=[];
+        }
+        $comment['todopassport_comments'] = $request->comment;
+        $demandLetter->update([
+            'comments' => $comment,
+            'attached_files' => $data,
+            'status' => 2
+        ]);
+        return \redirect()->back();
+
+    }
+
     public function addPassportComment(Request $request,DemandLetter $demandLetter)
     {
         $this->validate($request,[
@@ -171,7 +200,7 @@ class DemandLetterController extends Controller
         $demandLetter->update([
             'comments' => $comment,
             'attached_files' => $data,
-            'status' => 2
+            'status' => 3
         ]);
         return \redirect()->back();
 
@@ -197,7 +226,7 @@ class DemandLetterController extends Controller
         $demandLetter->update([
             'comments' => $comment,
             'attached_files' => $data,
-            'status' => 3
+            'status' => 4
         ]);
         return \redirect()->back();
     }
@@ -222,7 +251,7 @@ class DemandLetterController extends Controller
         $demandLetter->update([
             'comments' => $comment,
             'attached_files' => $data,
-            'status' => 4
+            'status' => 5
         ]);
         return \redirect()->back();
     }
@@ -247,13 +276,13 @@ class DemandLetterController extends Controller
         $demandLetter->update([
             'comments' => $comment,
             'attached_files' => $data,
-            'status' => 5
+            'status' => 6
         ]);
         return \redirect()->back();
     }
 
 
-    public function showPassportList(DemandLetter $demandLetter)
+    public function showToDoPassportList(DemandLetter $demandLetter)
     {
         $demandLetters = DemandLetter::with(['namelist' => function ($nameList) {
             $nameList->where('status','>=',1);
@@ -261,10 +290,18 @@ class DemandLetterController extends Controller
         return view('demandletter.detail2',['demandLetters' => $demandLetters->toArray()]);
     }
 
-    public function showContractList(DemandLetter $demandLetter)
+    public function showPassportList(DemandLetter $demandLetter)
     {
         $demandLetters = DemandLetter::with(['namelist' => function ($nameList) {
             $nameList->where('status','>=',2);
+         }])->find($demandLetter)->first();
+        return view('demandletter.passportNameList',['demandLetters' => $demandLetters->toArray()]);
+    }
+
+    public function showContractList(DemandLetter $demandLetter)
+    {
+        $demandLetters = DemandLetter::with(['namelist' => function ($nameList) {
+            $nameList->where('status','>=',3);
          }])->find($demandLetter)->first();
         return view('demandletter.contractlist',['demandLetters' => $demandLetters->toArray()]);
     }
@@ -272,8 +309,15 @@ class DemandLetterController extends Controller
     public function showSendingList(DemandLetter $demandLetter)
     {
         $demandLetters = DemandLetter::with(['namelist' => function ($nameList) {
-            $nameList->where('status','>=',3);
+            $nameList->where('status','>=',4);
          }])->find($demandLetter)->first();
         return view('demandletter.sendingList',['demandLetters' => $demandLetters->toArray()]);
+    }
+
+    public function export($status)
+    {
+        $nameList = NameList::where('status','>=',$status)->whereErrorStatus(0)->get(['name_mm','father_name_mm','dob_mm','nrc_mm','religion'])->toArray();
+        
+        return Excel::download(new BladeExport($nameList), now().'export.xlsx');
     }
 }

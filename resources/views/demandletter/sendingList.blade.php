@@ -36,11 +36,11 @@
                         <th>NRC</th>
                         <th>Gender</th>
                         <th>Address</th>
-                        <th>Operation</th>
+                        {{-- <th>Operation</th> --}}
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($demandLetters['name_list'] as $key => $name_list)
+                    @foreach ($demandLetters['namelist'] as $key => $name_list)
                         <tr>
                             <td>{{ $key+1 }}</td>
                             <td>
@@ -51,9 +51,9 @@
                             <td>{{ $name_list['nrc_eng'] }}</td>
                             <td>{{ $name_list['gender_eng'] }}</td>
                             <td>{{ $name_list['address_eng'] }}</td>
-                            <td>
+                            {{-- <td>
                                 <a href="{{ url('worker/edit/'.$name_list['id']) }}" class="btn btn-info">Edit</a>
-                            </td>
+                            </td> --}}
                         </tr>
                     @endforeach
                 </tbody>
@@ -79,8 +79,8 @@
                             @endif
                         </div>
                         <div class="form-group">
-                            <label for="photo">Attach File(s) Upload<span class="text-danger">*</span></label> 
-                            <input type="file"  name="files[]" required id="photo" placeholder="Upload photo.." multiple>
+                            <label for="photo">Attach File(s) Upload<</label> 
+                            <input type="file"  name="files[]"  id="photo" placeholder="Upload photo.." multiple>
                             @if($errors->has('photo'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('photo') }}</strong>
@@ -114,8 +114,8 @@
                             @endif
                         </div>
                         <div class="form-group">
-                            <label for="photo">Attach File(s) Upload<span class="text-danger">*</span></label> 
-                            <input type="file"  name="files[]" required placeholder="Upload photo.." multiple>
+                            <label for="photo">Attach File(s) Upload</label> 
+                            <input type="file"  name="files[]"  placeholder="Upload photo.." multiple>
                             @if($errors->has('photo'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('photo') }}</strong>
@@ -131,14 +131,20 @@
     </div>
     <div class="row mt-3">
         <div class="col-md-4">
-            @if($demandLetters['summary_comments'])
-            <a href="{{ url('demand_letter/lock/'.$demandLetters['id']) }}" class="btn btn-primary">
-            <img src="{{ asset('svg/lock.png') }}" width="20px" height="20px" alt="lock this"/> &nbsp; Lock this demand Letter
-            </a>
+            @if($demandLetters['status']==6)
+                @if($demandLetters['lock_status'])
+                <a href="{{ url('demand_letter/unlock/'.$demandLetters['id']) }}" class="btn btn-primary">
+                    <img src="{{ asset('svg/lock.png') }}" width="20px" height="20px" alt="lock this"/> &nbsp; Unlock this demand Letter
+                    </a>
+                @else
+                <a href="{{ url('demand_letter/lock/'.$demandLetters['id']) }}" class="btn btn-primary">
+                    <img src="{{ asset('svg/unlock.png') }}" width="20px" height="20px" alt="lock this"/> &nbsp; Lock this demand Letter
+                    </a>
+                @endif
             @endif
         </div>
         <div class="col-md-4 ml-auto">
-        <button class="btn btn-primary m-1 float-right " id="btnSummary" {{ ($demandLetters['sending_comments'])? :'disabled'}}>Summary</button>
+        <button class="btn btn-primary m-1 float-right " id="btnSummary" {{ ($demandLetters['status'] >= 5 )? :'disabled'}}>Summary</button>
         <button class="btn btn-primary m-1 float-right" id="btnNote">Note</button>
         </div>
     </div>

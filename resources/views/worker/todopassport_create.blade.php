@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('css')
-    <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">    
 @endsection
 
 @section('content')
@@ -19,17 +19,17 @@
             </div>
         </div>
         <div class="col-md-5">
-            <a href="{{ url('demand_letter/passport/'.$demandLetterID) }}" class="btn btn-danger">Back To Passport Name List</a>
+            <a href="{{ url('demand_letter/todopassport/'.$demandLetterID) }}" class="btn btn-danger">Back To ToDoPassport Name List</a>
         </div>
     </div>
     <div class="row d-none" id="form">
         <div class="col-md-10 offset-md-1">
             <div class="card">
                 <div class="card-header">
-                    Worker Passport Issue Form
+                    To Do Passport Form
                 </div>
                 <div class="card-body">
-                    <form action="{{ url('worker/passport/update') }}" method="POST" id="updateForm">
+                    <form action="{{ url('worker/todopassport/update') }}" method="POST" id="updateForm" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="demandLetterID" value="{{ $demandLetterID }}">
                         <input type="hidden" name="nameListID" value="" id="nameListID">
@@ -58,7 +58,7 @@
                             <textarea class="form-control" id="address" disabled>{{ old('address') }}</textarea>                            
                         </div> 
 
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <label for="name">Name(ENG)<span class="text-danger">*</span></label>
                             <input type="text" class="form-control" name="name" required id="name" placeholder="Enter name.." id="name" value="{{ old('name') }}">
                             @if($errors->has('name'))
@@ -93,16 +93,7 @@
                                     <strong>{{ $errors->first('gender') }}</strong>
                                 </span>
                             @endif
-                        </div>    
-                        <div class="form-group">
-                            <label for="dob_eng">Date of Birth(ENG)<span class="text-danger">*</span></label>
-                            <input type="date" class="form-control"  name="dob_eng" required id="dob_eng" placeholder="Enter Date of Birth..." value="{{ old('dob_eng') }}">
-                            @if($errors->has('dob_eng'))
-                                <span class="text-danger">
-                                    <strong>{{ $errors->first('dob_eng') }}</strong>
-                                </span>
-                            @endif
-                        </div>                     
+                        </div>                       
                         <div class="form-group">
                             <label for="address">Address(ENG)<span class="text-danger">*</span></label>
                             <textarea class="form-control" name="address" required id="address" placeholder="Enter Address..">{{ old('address') }}</textarea>
@@ -129,7 +120,7 @@
                                     <strong>{{ $errors->first('passport_issue_date') }}</strong>
                                 </span>
                             @endif
-                        </div>   
+                        </div>    --}}
                         <div class="form-group">
                             <label for="photo">Photo (Optional)</label>
                             <input type="file" class="form-control"  name="photo" id="photo">
@@ -140,11 +131,11 @@
                             @endif
                         </div>
                         <div class="form-group">
-                            <label for="salary">Salary<span class="text-danger">*</span></label>
-                            <input type="number" min="0" class="form-control"  name="salary" required id="salary" placeholder="Enter salary..." value="{{ old('salary') }}">
-                            @if($errors->has('salary'))
+                            <label for="religion">Religion<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control"  name="religion" required id="religion" placeholder="Enter Religion..." value="{{ old('religion') }}">
+                            @if($errors->has('religion'))
                                 <span class="text-danger">
-                                    <strong>{{ $errors->first('salary') }}</strong>
+                                    <strong>{{ $errors->first('religion') }}</strong>
                                 </span>
                             @endif
                         </div> 
@@ -159,9 +150,8 @@
 </div>
 @endsection
 
-@section('js')  
+@section('js')
 <script src="{{ asset('js/select2.min.js') }}"></script>
-
 <script>
     $(document).ready(function() {
         $('.select2').select2();

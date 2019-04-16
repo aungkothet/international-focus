@@ -7,6 +7,7 @@ use App\DemandLetterNameList;
 use App\NameList;
 use App\Rules\OlderThan;
 use Illuminate\Http\Request;
+use File;
 use QrCode;
 use Storage;
 
@@ -47,14 +48,22 @@ class NameListController extends Controller
             'nrc' => 'required|unique:name_lists,nrc_mm',
             'dob' => 'required',
             'address' => 'required',
-            'photo' => 'required'
+            'photo' => 'nullable'
         ]);
         $unique_id = strtoupper(bin2hex(openssl_random_pseudo_bytes(4)));
-        $photoPath = $request->file('photo')->store('public/workerPhoto/'.$unique_id);
-       
+        if($request->file('photo')) {
+            $photoPath = $request->file('photo')->store('public/workerPhoto/'.$unique_id);
+        } else {
+            $photoPath = '';
+        }
+
         $pngImage = QrCode::format('png')
         ->size(500)->errorCorrection('H')
         ->generate($unique_id);
+
+        $path = storage_path('app/public/workerPhoto/'.$unique_id.'/');
+        File::isDirectory($path) or File::makeDirectory($path, 0777, true, true);
+
         $qr_name = storage_path('app/public/workerPhoto/'.$unique_id.'/'. $unique_id .'.png');
         file_put_contents($qr_name ,$pngImage);
         
@@ -107,6 +116,11 @@ class NameListController extends Controller
     public function editPassport(NameList $nameList,$demandLetterID)
     {
         return view('worker.edit_passport',['workerDetail' => $nameList, 'demandLetterID' => $demandLetterID]);
+    }
+
+    public function editToDoPassport(NameList $nameList,$demandLetterID)
+    {
+        return view('worker.edit_todopassport',['workerDetail' => $nameList, 'demandLetterID' => $demandLetterID]);
     }
 
     /**
@@ -165,15 +179,30 @@ class NameListController extends Controller
             'father_name_eng' => $request->fatherName,
             'gender_eng' => $request->gender,
             'nrc_eng' => $request->nrc,
-            'dob_eng' => $nameList->dob,
+            'dob_eng' => $request->dob,
             'address_eng' => $request->address,
             'passport_no' => $request->passport,
             'issue_date_of_passport' => $request->passport_issue_date,
-            'status' => 1
+            
         ]);
         return \redirect()->back()->with('status',"Update Success");
     }
 
+    public function todopassportUpdate(Request $request, NameList $nameList)
+    {
+        if($request->file('photo'))
+        {
+            $photoPath = $request->file('photo')->store('public/workerPhoto');
+        } else {
+            $photoPath = $nameList->photo;
+        }
+        $nameList->update([
+            'photo' => $photoPath,
+            'religion' => $request->religion,
+            'error_status' => ($request->error_status)? 0: $nameList->error_status
+        ]);
+        return redirect()->back();
+    }
     /**
      * Remove the specified resource from storage.
      *
@@ -184,11 +213,37 @@ class NameListController extends Controller
     {
         //
     }
+    public function createToDoPassport(DemandLetter $demandLetterID)
+    {
+        $demandLetters = $demandLetterID->with(['namelist' => function ($nameList) {
+            $nameList->whereStatus(0);
+         }])->first();
+        return view('worker.todopassport_create',['workerList' => $demandLetters->namelist, 'demandLetterID' => $demandLetters['id']]);
+        
+    }
+
+    public function updateToDoPassport(Request $request)
+    {
+        if($request->file('photo'))
+        {
+            $photoPath = $request->file('photo')->store('public/workerPhoto');
+        } else {
+            $photoPath = '';
+        }
+        $nameList = NameList::find($request->nameListID);
+        $nameList->update([
+            'photo' => ($photoPath)? $photoPath : $nameList->photo,
+            'religion' => $request->religion,
+            'status' => 1
+        ]);
+        return redirect()->back();
+    }
+
 
     public function createPassport(DemandLetter $demandLetterID)
     {
         $demandLetters = $demandLetterID->with(['namelist' => function ($nameList) {
-            $nameList->whereStatus(0);
+            $nameList->whereStatus(1)->whereErrorStatus(0);
          }])->first();
         return view('worker.passport_create',['workerList' => $demandLetters->namelist, 'demandLetterID' => $demandLetters['id']]);
         
@@ -196,21 +251,30 @@ class NameListController extends Controller
 
     public function updatePassport(Request $request)
     {
+        
         $nameList = NameList::find($request->nameListID);
+        if($request->file('photo'))
+        {
+            $photoPath = $request->file('photo')->store('public/workerPhoto');
+        } else {
+            $photoPath = $nameList->photo;
+        }
+        
         $nameList->update([
             'name_eng' => $request->name ,
             'father_name_eng' => $request->fatherName,
             'gender_eng' => $request->gender,
             'nrc_eng' => $request->nrc,
-            'dob_eng' => $nameList->dob_mm,
+            'dob_eng' => $request->dob_eng,
             'address_eng' => $request->address,
             'passport_no' => $request->passport_no,
             'issue_date_of_passport' => $request->passport_issue_date,
-            'religion' => $request->religion
+            'photo' => $photoPath,
+            'status' => 2
         ]);
         $demandLetterNameList = DemandLetterNameList::where('demand_letter_id',$request->demandLetterID)
             ->whereNameListId($request->nameListID)->first();
-        $demandLetterNameList->update(['passport_status'=>1]);
+        $demandLetterNameList->update(['salary'=>$request->salary]);
         
         return redirect()->back();
     }
@@ -218,7 +282,7 @@ class NameListController extends Controller
     public function createContract(DemandLetter $demandLetterID)
     {
         $demandLetters = $demandLetterID->with(['namelist' => function ($nameList) {
-            $nameList->whereStatus(1);
+            $nameList->whereStatus(2)->whereErrorStatus(0);
          }])->first();
         return view('worker.contract_create',['workerList' => $demandLetters->namelist, 'demandLetterID' => $demandLetters->id]);
     }
@@ -227,32 +291,28 @@ class NameListController extends Controller
     {
         $demandLetterNameList = DemandLetterNameList::whereDemandLetterId($request->demandLetterID)->whereNameListId($request->nameListID)->first();
         $demandLetterNameList->update([
-            'contract_status'=>1,
             'labour_card_no' => $request->labourcard_no,
             'issue_labour_date' => $request->issue_labour_date,
-            'salary' => $request->salary,
-            'status' => 2
         ]);
         
+        $nameList = NameList::find($request->nameListID);
+        $nameList->update([
+            'status' => 3
+        ]);
         return redirect()->back();
     }
 
     public function createSending(DemandLetter $demandLetterID)
     {
         $demandLetters = $demandLetterID->with(['namelist' => function ($nameList) {
-            $nameList->whereStatus(2);
+            $nameList->whereStatus(3);
          }])->first();
         return view('worker.sending_create',['workerList' => $demandLetters->namelist, 'demandLetterID' => $demandLetters['id']]);
     }
 
     public function updateSending(Request $request)
     {
-        $demandLetterNameList = DemandLetterNameList::where('demand_letter_id',$request->demandLetterID)->whereIn('name_list_id',$request->nameList)->get();
-        foreach ($demandLetterNameList as $key => $value) {
-            $value->update([
-                'sending_status' => 1
-            ]);
-        }
+        $namelist = NameList::whereIn("id",$request->nameList)->update(['status'=>4]);   
         return redirect('demand_letter/sending/'.$request->demandLetterID);
     }
 
@@ -266,6 +326,6 @@ class NameListController extends Controller
         $nameList->update([
             'error_status' => 1,
         ]);
-        return \redirect('/demand_letter/passport/'.$demandLetterID);
+        return \redirect('/demand_letter/todopassport/'.$demandLetterID);
     }
 }

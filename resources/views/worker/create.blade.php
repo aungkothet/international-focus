@@ -71,8 +71,8 @@
                             @endif
                         </div>
                         <div class="form-group">
-                            <label for="photo">Photo Upload<span class="text-danger">*</span></label> 
-                            <input type="file"  name="photo" required id="photo" placeholder="Upload photo..">
+                            <label for="photo">Photo Upload</label> 
+                            <input type="file"  name="photo" id="photo" placeholder="Upload photo..">
                             @if($errors->has('photo'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('photo') }}</strong>

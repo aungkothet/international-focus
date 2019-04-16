@@ -6,11 +6,6 @@
 
 @section('content')
 <div class="container">
-    {{-- <div class="row">
-        <div class="col-md-6 offset-md-6">
-            
-        </div>
-    </div> --}}
     <div class="row mt-3" id="form">
         <div class="col-md-10 offset-md-1">
             <div class="card">
@@ -94,7 +89,7 @@
                        
                         <button type="submit" class="btn btn-primary">Submit</button>
                         {{-- <a href="{{ url('demand_letter/detail/'.$demandLetterID) }}" class="btn btn-danger">Back To Detail</a> --}}
-                        <a href="{{ url('demand_letter/contract/'.$demandLetterID) }}" class="btn btn-danger">Back To Contract List</a> 
+                        <a href="{{ url('demand_letter/sending/'.$demandLetterID) }}" class="btn btn-danger">Back To Sending  List</a> 
                     </form> 
                 </div>
             </div>

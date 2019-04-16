@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('css')
-    
+<link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">    
 @endsection
 
 @section('content')
@@ -10,7 +10,7 @@
         <div class="col-md-6 offset-md-1">
             <div class="form-group">
                 <label for="name">Select Worker To Fill <span class="text-danger">*</span></label>
-                <select id="workerID">
+                <select id="workerID" class="select2">
                     <option disabled selected>Choose Worker First</option>
                     @foreach ($workerList as $worker)
                         <option value="{{ $worker['id'] }}">{{ $worker['name_mm']}} , {{ $worker['nrc_mm']}}</option>
@@ -85,7 +85,7 @@
                                 </span>
                             @endif
                         </div> --}}
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <label for="salary">Salary<span class="text-danger">*</span></label>
                             <input type="number" class="form-control"  name="salary" required id="salary" min="0" placeholder="Enter Salary.." value="{{ old('salary') }}">
                             @if($errors->has('salary'))
@@ -93,7 +93,7 @@
                                     <strong>{{ $errors->first('salary') }}</strong>
                                 </span>
                             @endif
-                        </div>                       
+                        </div>                        --}}
                        
                         <button type="submit" class="btn btn-primary">Submit</button>
                         <a href="{{ url('demand_letter/detail/'.$demandLetterID) }}" class="btn btn-danger">Back To Detail</a>
@@ -106,8 +106,10 @@
 @endsection
 
 @section('js')
+<script src="{{ asset('js/select2.min.js') }}"></script>
 <script>
     $(document).ready(function() {
+        $('.select2').select2();
         $('#workerID').change(function(){   
             @foreach($workerList as $worker)
                 if($(this).val() == "{{ $worker['id']}}")

@@ -45,7 +45,7 @@
                             <tr>
                                 <td>{{ $key+1 }}</td>
                                 <td>
-                                    <img src="{{ url(Storage::url(str_replace('public','',$name_list['photo']))) }}" class="rounded" width="50px" height="50px" >
+                                    <img src="{{ ($name_list['photo'])? url(Storage::url(str_replace('public','',$name_list['photo']))) : asset('default.jpg')}}" class="rounded" width="50px" height="50px" >
                                     <img src="{{ url(Storage::url(str_replace('public','',$name_list['qrcode']))) }}" class="rounded" width="50px" height="50px" >
                                 </td>
                                 <td>{{ $name_list['name_mm'] }}</td>
@@ -98,9 +98,10 @@
             </div>       
         </div>
         <div class="row mt-3">
-            <div class="col-md-4 ml-auto">               
-            <a href="{{ url('demand_letter/passport/'.$demandLetters['id']) }}" class="btn btn-primary m-1 float-right {{ ($demandLetters['status'] >= 1 )? :'disabled'}}">Next</a>
-            <button class="btn btn-primary m-1 float-right" id="btnNote">Note</a>
+            <div class="col-md-4 ml-auto">             
+            <a href="{{ url('demand_letter/todopassport/'.$demandLetters['id']) }}" class="btn btn-primary m-1 float-right {{ ($demandLetters['status'] >= 1 )? :'disabled'}}">Next</a>
+            <button class="btn btn-primary m-1 float-right" id="btnNote">Note</button>
+            <a href="{{ url('/Export/1') }}" class="btn btn-primary m-1 float-right">Export Name List</a>
             </div>
         </div>
     </div>

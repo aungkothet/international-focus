@@ -50,9 +50,14 @@
                                 <td>{{ $demandletter->count['total'] }}</td>
                                 <td>
                                     <a href="{{ url('demand_letter/edit/'.$demandletter->id) }}" class="btn btn-info">Edit</a>
-                                    @if ($demandletter->lock_status)
-                                        
-                                        <a href="{{ url('demand_letter/unlock/'.$demandletter->id) }}" class="btn btn-info"><img src="{{asset('svg/lock.png')}}" alt="locked" width="30px" height="30px"></a>
+                                    @if($demandletter->lock_status)
+                                    <a href="{{ url('demand_letter/unlock/'.$demandletter->id) }}" class="btn btn-primary">
+                                        <img src="{{ asset('svg/lock.png') }}" width="20px" height="20px" alt="lock this"/>
+                                    </a>
+                                    @else
+                                    <a href="{{ url('demand_letter/lock/'.$demandletter->id) }}" class="btn btn-primary">
+                                        <img src="{{ asset('svg/unlock.png') }}" width="20px" height="20px" alt="lock this"/>
+                                    </a>
                                     @endif
                                 </td>
                             </tr>
