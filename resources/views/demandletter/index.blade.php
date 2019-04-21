@@ -41,7 +41,7 @@
                         @php $i=1; @endphp
                         @foreach ($demandLetters->demandletter as $key => $demandletter)
                             @auth
-                            <tr>
+                            <tr class="{{ ($name_list['error_status'])? "bg-danger": ''}}">
                                 <td>{{ $key+1 }}</td>
                                 <td>{{ date('d-M-Y', strtotime($demandletter->date)) }}</td>
                                 <td><a href="{{ url('demand_letter/detail/'.$demandletter->id) }}"> {{ $demandletter->demand_no }} </a></td>
@@ -63,7 +63,7 @@
                             </tr>
                             @else
                                 @if (!$demandletter->lock_status)
-                                <tr>
+                                <tr class="{{ ($name_list['error_status'])? "bg-danger": ''}}">
                                     <td>{{ $i++ }}</td>
                                     <td>{{ date('d-M-Y', strtotime($demandletter->date)) }}</td>
                                     <td><a href="{{ url('demand_letter/detail/'.$demandletter->id) }}"> {{ $demandletter->demand_no }} </a></td>

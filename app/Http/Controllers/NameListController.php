@@ -145,7 +145,7 @@ class NameListController extends Controller
         {
             $photoPath = $request->file('photo')->store('public/workerPhoto');
         } else {
-            $photoPath = '';
+            $photoPath = $nameList->photo;
         }
 
         $nameList->update([
@@ -155,7 +155,11 @@ class NameListController extends Controller
             'nrc_mm' => $request->nrc,
             'dob_mm' => $request->dob,
             'address_mm' => $request->address,
-            'photo' => ($photoPath)? $photoPath : $nameList->photo
+            'photo' => $photoPath ,
+            'nrc_requirement' => $request->nrc_req,
+            'repersentative_name' => $request->repersentative_name,
+            'phone_number' => $request->phone_no,
+            'card_number' => $request->card_number
         ]);      
         
         return \redirect()->back()->with('status',"Update Success");
